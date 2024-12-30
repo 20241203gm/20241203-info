@@ -189,6 +189,57 @@ const StorySection = ({ data }: { data: TimelineSection }) => {
 - [ ] 미디어 콘텐츠 표시 최적화
 - [ ] 스크롤 인터랙션 개선
 
+### 2023-12-30 - 웹폰트 적용 및 미디어 처리 개선
+
+#### 1. 웹폰트 적용
+- Google Fonts 추가
+  - Noto Sans KR (100-900)
+  - East Sea Dokdo
+  - Nanum Pen Script
+
+- 폰트 적용
+  ```typescript
+  // 본문 텍스트 스타일
+  <pre style={{ 
+    fontSize: '1rem',
+    fontWeight: '200',
+    fontFamily: "'Noto Sans KR', sans-serif"
+  }}>
+
+  // 요약 텍스트 스타일
+  <div style={{ 
+    fontSize: '1.7rem',
+    fontFamily: "'East Sea Dokdo', cursive",
+    textAlign: 'center'
+  }}>
+  ```
+
+#### 2. 유튜브 URL 처리 개선
+- 라이브 스트림 URL 지원 추가
+  ```typescript
+  const getYoutubeEmbedUrl = (url: string) => {
+    // 라이브 스트림 타임스탬프 처리
+    if (url.includes('live/')) {
+      const videoId = url.split('live/')[1].split('?')[0];
+      const timestamp = url.includes('?t=') ? url.split('?t=')[1] : '';
+      return `https://www.youtube.com/embed/${videoId}${timestamp ? `?start=${timestamp}` : ''}`;
+    }
+    // ... 기존 URL 처리 로직
+  };
+  ```
+
+#### 3. 스타일 최적화
+- 텍스트 크기와 여백 조정
+  - 본문: 1rem, 200 weight
+  - 요약: 1.7rem, East Sea Dokdo
+- 요약 텍스트 중앙 정렬
+- 미디어 섹션 여백 조정
+
+#### 다음 작업
+- [ ] 모바일 반응형 디자인
+- [ ] 스크롤 애니메이션 개선
+- [ ] 미디어 섹션 레이아웃 최적화
+
 ## 커밋 컨벤션
 
 커밋 메시지는 다음 형식을 따릅니다:
