@@ -204,6 +204,17 @@ const StorySection: React.FC<Story> = ({
             }}>
               {content}
             </pre>
+
+            {media && media.length > 0 && (
+              <div style={{ 
+                width: '100%', 
+                marginTop: '2rem',
+                maxWidth: '100%'
+              }}>
+                <MediaContent media={media} />
+              </div>
+            )}
+
             {summary && (
               <div style={{ 
                 fontSize: 'clamp(1.5rem, 5vw, 1.7rem)', 
@@ -219,16 +230,6 @@ const StorySection: React.FC<Story> = ({
               </div>
             )}
           </div>
-          
-          {media && media.length > 0 && (
-            <div style={{ 
-              width: '100%', 
-              marginTop: '2rem',
-              maxWidth: '100%'
-            }}>
-              <MediaContent media={media} />
-            </div>
-          )}
         </div>
       </div>
     </div>
