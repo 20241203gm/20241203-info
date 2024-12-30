@@ -224,7 +224,9 @@ const StorySection: React.FC<Story> = ({
                 wordBreak: 'keep-all',
                 textAlign: 'center',
                 fontFamily: "'East Sea Dokdo', cursive",
-                padding: '0 clamp(1rem, 3vw, 2rem)'
+                padding: '2rem clamp(1rem, 3vw, 2rem)',
+                backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                borderRadius: '0.5rem'
               }}>
                 "{summary}"
               </div>
