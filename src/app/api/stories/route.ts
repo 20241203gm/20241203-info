@@ -76,34 +76,61 @@ const getStoriesFromSheet = async () => {
       console.log('Raw data from sheets:', JSON.stringify(rows, null, 2));
       console.log('Processing rows...');
 
-      const stories: Story[] = rows.map((row) => {
-        if (!Array.isArray(row) || row.length < 6) {
-          console.warn('Invalid row format:', row);
+      const stories: Story[] = rows.map((row, index) => {
+        console.log(`Processing row ${index}:`, row);
+        
+        if (!Array.isArray(row)) {
+          console.warn(`Row ${index} is not an array:`, row);
           return null;
         }
 
-        const [background, content, mediaType, mediaUrl, mediaCaption, summary] = row;
+        const [background = '', content = '', mediaType = '', mediaUrl = '', mediaCaption = '', summary = ''] = row;
+        console.log(`Row ${index} fields:`, {
+          background,
+          content,
+          mediaType,
+          mediaUrl,
+          mediaCaption,
+          summary
+        });
+
         const media: Media[] = [];
 
-        if (mediaUrl && mediaCaption) {
+        if (mediaUrl && mediaType) {
+          console.log(`Row ${index} has media:`, { mediaType, mediaUrl, mediaCaption });
           media.push({
-            type: mediaType as 'video' | 'image' | 'text',
+            type: (mediaType || 'text') as 'video' | 'image' | 'text',
             url: mediaUrl,
-            caption: mediaCaption,
+            caption: mediaCaption || '',
           });
         }
 
         const story: Story = {
-          background,
-          content,
+          background: background || '',
+          content: content || '',
           media,
-          summary,
+          summary: summary || '',
         };
 
-        console.log('Processed story:', JSON.stringify(story, null, 2));
+        console.log(`Processed story ${index}:`, JSON.stringify(story, null, 2));
         return story;
-      }).filter(Boolean) as Story[];
+      }).filter((story): story is Story => {
+        if (!story) {
+          return false;
+        }
+        const isValid = 
+          typeof story.background === 'string' &&
+          typeof story.content === 'string' &&
+          Array.isArray(story.media) &&
+          typeof story.summary === 'string';
+        
+        if (!isValid) {
+          console.warn('Invalid story object:', story);
+        }
+        return isValid;
+      });
 
+      console.log('Final stories array:', JSON.stringify(stories, null, 2));
       return stories;
     } catch (error) {
       console.error('Error in getStoriesFromSheet:', error);
