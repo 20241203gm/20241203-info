@@ -43,9 +43,26 @@ const getStoriesFromSheet = async () => {
     console.log('Fetching data from sheet...');
     console.log('Sheet ID:', sheetId);
     try {
+      const spreadsheet = await sheets.spreadsheets.get({
+        spreadsheetId: sheetId,
+      });
+
+      if (!spreadsheet.data.sheets || spreadsheet.data.sheets.length === 0) {
+        throw new Error('No sheets found in the spreadsheet');
+      }
+
+      const firstSheet = spreadsheet.data.sheets[0];
+      const sheetTitle = firstSheet.properties?.title;
+
+      if (!sheetTitle) {
+        throw new Error('Could not get sheet title');
+      }
+
+      console.log('First sheet title:', sheetTitle);
+
       const response = await sheets.spreadsheets.values.get({
         spreadsheetId: sheetId,
-        range: 'Sheet1!A2:G',
+        range: `${sheetTitle}!A2:G`,
       });
       
       console.log('API Response:', JSON.stringify(response.data, null, 2));
