@@ -53,30 +53,34 @@ export default function StorySection({ background, content, media, summary }: St
 
       {/* 콘텐츠 컨테이너 */}
       <div style={{
-        width: 'min(900px, 75%)',
-        height: '80vh',
+        width: 'min(900px, 90%)',
+        height: '90vh',
         display: 'flex',
         flexDirection: 'column',
         gap: '2vh',
         color: 'white',
         zIndex: 1,
+        position: 'relative',
       }}>
         {/* 설명 섹션 */}
         <div 
           className="story-content-scroll"
           style={{
-            height: contentHeight,
+            flex: mediaItem?.type === 'text' ? '2' : '1',
             padding: 'clamp(1rem, 3vw, 2rem)',
             overflowY: 'auto',
+            backgroundColor: 'rgba(0, 0, 0, 0.3)',
+            borderRadius: '0.5rem',
           }}
         >
           <pre style={{
-            fontSize: '1rem',
+            fontSize: 'clamp(0.9rem, 2.5vw, 1rem)',
             fontWeight: '200',
             fontFamily: "'Noto Sans KR', sans-serif",
             whiteSpace: 'pre-wrap',
             wordBreak: 'keep-all',
             lineHeight: '1.6',
+            margin: 0,
           }}>
             {content}
           </pre>
@@ -86,11 +90,13 @@ export default function StorySection({ background, content, media, summary }: St
         {mediaItem && mediaItem.type !== 'text' && (
           <div 
             style={{
-              height: '40%',
+              flex: '2',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              padding: 'clamp(1rem, 3vw, 2rem)',
+              padding: 'clamp(0.5rem, 2vw, 1rem)',
+              backgroundColor: 'rgba(0, 0, 0, 0.3)',
+              borderRadius: '0.5rem',
             }}
           >
             {mediaItem.type === 'video' ? (
@@ -100,6 +106,7 @@ export default function StorySection({ background, content, media, summary }: St
                   width: '100%',
                   height: '100%',
                   border: 'none',
+                  borderRadius: '0.25rem',
                 }}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
@@ -112,6 +119,7 @@ export default function StorySection({ background, content, media, summary }: St
                   width: '100%',
                   height: '100%',
                   objectFit: 'contain',
+                  borderRadius: '0.25rem',
                 }}
               />
             )}
@@ -121,18 +129,22 @@ export default function StorySection({ background, content, media, summary }: St
         {/* 미디어 설명 */}
         {mediaItem && (
           <div style={{
-            height: '10%',
+            flex: '0.5',
             display: 'flex',
             alignItems: 'center',
-            padding: '0 clamp(1rem, 3vw, 2rem)',
+            padding: '0.5rem clamp(1rem, 3vw, 2rem)',
+            backgroundColor: 'rgba(0, 0, 0, 0.3)',
+            borderRadius: '0.5rem',
+            flexWrap: 'wrap',
+            gap: '0.5rem',
           }}>
             <p style={{
-              fontSize: '0.9rem',
+              fontSize: 'clamp(0.8rem, 2vw, 0.9rem)',
               fontFamily: "'Noto Sans KR', sans-serif",
               fontWeight: '200',
               flex: 1,
               margin: 0,
-              paddingRight: '0.5rem',
+              minWidth: '200px',
             }}>
               {mediaItem.caption}
             </p>
@@ -146,13 +158,12 @@ export default function StorySection({ background, content, media, summary }: St
                 color: 'black',
                 textDecoration: 'none',
                 borderRadius: '4px',
-                fontSize: '0.9rem',
+                fontSize: 'clamp(0.8rem, 2vw, 0.9rem)',
                 fontFamily: "'Noto Sans KR', sans-serif",
                 fontWeight: '400',
                 opacity: 0.9,
                 transition: 'opacity 0.2s',
                 whiteSpace: 'nowrap',
-                flexShrink: 0,
               }}
               onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
               onMouseLeave={(e) => e.currentTarget.style.opacity = '0.9'}
@@ -164,23 +175,24 @@ export default function StorySection({ background, content, media, summary }: St
 
         {/* 요약 섹션 */}
         <div style={{
-          height: '30%',
+          flex: '1',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
+          backgroundColor: 'rgba(255, 255, 255, 0.1)',
+          borderRadius: '0.5rem',
+          padding: 'clamp(0.5rem, 2vw, 1rem)',
         }}>
           <div 
             className="story-content-scroll"
             style={{
-              backgroundColor: 'rgba(255, 255, 255, 0.1)',
-              padding: 'clamp(1rem, 3vw, 2rem)',
-              borderRadius: '0.5rem',
               maxHeight: '100%',
               overflowY: 'auto',
+              padding: 'clamp(0.5rem, 2vw, 1rem)',
             }}
           >
             <div style={{
-              fontSize: '1.7rem',
+              fontSize: 'clamp(1.4rem, 4vw, 1.7rem)',
               fontFamily: "'East Sea Dokdo', cursive",
               textAlign: 'center',
               whiteSpace: 'pre-wrap',
