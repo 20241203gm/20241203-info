@@ -39,10 +39,23 @@ export default function StorySection({ background, content, media, summary }: St
           left: 0,
           width: '100%',
           height: '100%',
-          zIndex: -1,
+          zIndex: -2,
           backgroundImage: `url(${background})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
+        }}
+      />
+
+      {/* 콘버레이 */}
+      <div
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          zIndex: -1,
+          backgroundColor: 'rgba(0, 0, 0, 0.7)',
         }}
       />
 
@@ -79,43 +92,46 @@ export default function StorySection({ background, content, media, summary }: St
         </pre>
 
         {/* 미디어 섹션 */}
-        {media && media.length > 0 && media.map((item, index) => (
-          <div key={index} style={{ width: '100%' }}>
-            {item.type === 'image' && (
-              <img 
-                src={item.url} 
-                alt={item.caption}
-                style={{
-                  width: '100%',
-                  height: 'auto',
-                  borderRadius: '0.5rem',
-                }}
-              />
-            )}
-            {item.type === 'video' && (
-              <iframe
-                src={item.url}
-                style={{
-                  width: '100%',
-                  aspectRatio: '16/9',
-                  border: 'none',
-                  borderRadius: '0.5rem',
-                }}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
-            )}
-            {item.caption && (
-              <div style={{
-                fontSize: '0.875rem',
-                color: 'rgba(255, 255, 255, 0.8)',
-                marginTop: '0.5rem',
-              }}>
-                {item.caption}
-              </div>
-            )}
-          </div>
-        ))}
+        {media && media.length > 0 && media.map((item, index) => {
+          console.log('Rendering media item:', item);
+          return (
+            <div key={index} style={{ width: '100%' }}>
+              {item.type === 'image' && (
+                <img 
+                  src={item.url} 
+                  alt={item.caption}
+                  style={{
+                    width: '100%',
+                    height: 'auto',
+                    borderRadius: '0.5rem',
+                  }}
+                />
+              )}
+              {item.type === 'video' && (
+                <iframe
+                  src={item.url}
+                  style={{
+                    width: '100%',
+                    aspectRatio: '16/9',
+                    border: 'none',
+                    borderRadius: '0.5rem',
+                  }}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              )}
+              {item.caption && (
+                <div style={{
+                  fontSize: '0.875rem',
+                  color: 'rgba(255, 255, 255, 0.8)',
+                  marginTop: '0.5rem',
+                }}>
+                  {item.caption}
+                </div>
+              )}
+            </div>
+          );
+        })}
 
         {/* 요약 */}
         {summary && (
