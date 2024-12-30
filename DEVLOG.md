@@ -350,9 +350,14 @@ touch src/components/archive/StorySection.tsx
 1. **구글 시트 템플릿 생성**
    - 시트 이름: "20241203.info - 스토리 데이터"
    - 시트 구조:
-     | 배경이미지 | 내용 | 미디어(선택) | 증언1 | 증언2 |
-     |------------|------|--------------|--------|--------|
-     | URL        | 텍스트 | URL        | 텍스트  | 텍스트  |
+     | 배경이미지 | 내용 | 미디어타입 | 미디어URL | 미디어설명 | 요약 |
+     |------------|------|------------|-----------|------------|------|
+     | URL        | 텍스트 | 드롭다운   | URL       | 텍스트     | 텍스트 |
+
+   - 미디어타입 드롭다운 옵션:
+     - image: 이미지 파일
+     - video: 동영상 파일
+     - text: 문서 링크
 
 2. **구글 API 설정 단계**
    1. Google Cloud Console 접속
@@ -370,7 +375,7 @@ npm install googleapis
 
 4. **환경 변수 설정**
    - .env.local 파일 생성
-   - 서비스 계정 키와 시트 ID 설정 
+   - 서비스 계정 키와 시트 ID 설정
 
 ### 구글 시트 API 설정 완료
 1. 서비스 계정 키 생성 및 저장
@@ -383,9 +388,9 @@ npm install googleapis
    SHEET_ID=your-google-sheet-id-here
    ```
 
-3. googleapis 패키지 설치
+3. googleapis 패키지 설치 확인
    ```bash
-   npm install googleapis
+   npm install googleapis @types/googleapis
    ``` 
 
 ### 모바일 테스트 환경 설정
@@ -420,3 +425,89 @@ npm install googleapis
    - 페이지 로드 확인
    - 데이터 연동 확인
    - 반응형 디자인 테스트 
+
+## 2024-03-12: StorySection 구현 완료
+
+### 핵심 기능
+1. 전체 화면 배경 이미지
+2. 이미지 위에 텍스트 오버레이
+3. 페이지 스크롤 스냅
+
+### 작동하는 코드
+```tsx
+export default function StorySection({ background, content, media, summary }: Story) {
+  return (
+    <div style={{ 
+      width: '100vw', 
+      height: '100vh',
+      position: 'relative',
+      scrollSnapAlign: 'start',
+      scrollSnapStop: 'always'
+    }}>
+      <img 
+        src={background}
+        alt=""
+        style={{
+          width: '100%',
+          height: '100%',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          objectFit: 'cover'
+        }}
+      />
+      
+      <div style={{
+        width: '100%',
+        height: '100%',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        color: '#ffffff',
+        zIndex: 1
+      }}>
+        <div style={{ maxWidth: '800px', padding: '2rem', textAlign: 'center' }}>
+          <div style={{ marginBottom: '2rem' }}>
+            <div style={{ fontSize: '1.25rem', whiteSpace: 'pre-wrap' }}>
+              {content}
+            </div>
+            {summary && (
+              <div style={{ fontSize: '1.5rem', fontWeight: 'bold', marginTop: '1rem' }}>
+                "{summary}"
+              </div>
+            )}
+          </div>
+          
+          {media && media.length > 0 && (
+            <div>
+              {media.map((item, index) => (
+                <MediaContent key={index} media={item} />
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+```
+
+### 주요 스타일링 포인트
+1. 배경 이미지:
+   - `position: absolute`로 컨테이너 전체 채움
+   - `objectFit: 'cover'`로 비율 유지하며 채움
+
+2. 텍스트 오버레이:
+   - `position: absolute`와 `zIndex: 1`로 이미지 위에 배치
+   - `color: '#ffffff'`로 흰색 텍스트 설정
+
+3. 스크롤 스냅:
+   - `scrollSnapAlign: 'start'`
+   - `scrollSnapStop: 'always'`
+
+### 참고사항
+- Tailwind 대신 인라인 스타일 사용으로 안정적인 스타일링 구현
+- 불필요한 중첩 구조 제거로 성능 최적화 

@@ -1,34 +1,114 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useRef } from 'react';
 import { Story, Media } from '@/types/story';
-import { nanumPen, notoSansKr } from '@/lib/fonts';
+import { useGSAP } from '@gsap/react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const MediaContent = ({ media }: { media: Media }) => {
+  // YouTube URL에서 비디오 ID를 추출하는 함수
+  const getYouTubeVideoId = (url: string) => {
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : null;
+  };
+
   switch (media.type) {
     case 'image':
       return (
         <figure className="my-8">
-          <img src={media.url} alt="" className="rounded-lg shadow-lg w-full" />
+          <img 
+            src={media.url} 
+            alt={media.caption || ''} 
+            className="w-full h-auto max-h-[70vh] object-contain rounded-lg"
+          />
           {media.caption && (
-            <figcaption className="mt-2 text-sm text-gray-300 italic">
+            <figcaption className="mt-2 text-sm text-white/80 italic">
               {media.caption}
             </figcaption>
           )}
         </figure>
       );
     case 'video':
+      const videoId = getYouTubeVideoId(media.url);
+      if (videoId) {
+        return (
+          <figure className="my-8">
+            <div style={{ 
+              position: 'relative',
+              width: '100%',
+              maxWidth: '1000px',
+              margin: '0 auto',
+              paddingBottom: 'min(56.25%, calc(100vh - 200px))',
+              borderRadius: '8px',
+              overflow: 'hidden'
+            }}>
+              <iframe
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '100%',
+                  border: 0
+                }}
+                src={`https://www.youtube.com/embed/${videoId}`}
+                title="YouTube video player"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            </div>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '1rem',
+              marginTop: '0.5rem'
+            }}>
+              {media.caption && (
+                <div className="text-sm text-white/80 italic">
+                  출처: {media.caption}
+                </div>
+              )}
+              <a 
+                href={media.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'inline-block',
+                  backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                  color: 'white',
+                  padding: '0.25rem 1rem',
+                  borderRadius: '4px',
+                  textDecoration: 'none',
+                  fontSize: '0.875rem',
+                  transition: 'background-color 0.2s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.6)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+                }}
+              >
+                원문 보기
+              </a>
+            </div>
+          </figure>
+        );
+      }
       return (
         <figure className="my-8">
           <video 
             src={media.url} 
             controls 
-            className="rounded-lg shadow-lg w-full"
+            className="w-full h-auto max-h-[70vh] object-contain rounded-lg"
           />
           {media.caption && (
-            <figcaption className="mt-2 text-sm text-gray-300 italic">
+            <figcaption className="mt-2 text-sm text-white/80 italic">
               {media.caption}
             </figcaption>
           )}
@@ -37,14 +117,39 @@ const MediaContent = ({ media }: { media: Media }) => {
     case 'text':
       return (
         <div className="my-8">
-          <a 
-            href={media.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-400 hover:text-blue-300 underline"
-          >
-            {media.caption || '문서 보기'}
-          </a>
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '1rem'
+          }}>
+            <div className="text-sm text-white/80 italic">
+              출처: {media.caption}
+            </div>
+            <a 
+              href={media.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: 'inline-block',
+                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                color: 'white',
+                padding: '0.25rem 1rem',
+                borderRadius: '4px',
+                textDecoration: 'none',
+                fontSize: '0.875rem',
+                transition: 'background-color 0.2s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.6)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+              }}
+            >
+              원문 보기
+            </a>
+          </div>
         </div>
       );
     default:
@@ -55,87 +160,131 @@ const MediaContent = ({ media }: { media: Media }) => {
 export default function StorySection({ background, content, media, summary }: Story) {
   const sectionRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-    
-    if (typeof window !== 'undefined') {
-      gsap.registerPlugin(ScrollTrigger);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!isMounted || !sectionRef.current || !contentRef.current) return;
-
-    // 배경 페이드 효과
-    gsap.fromTo(
-      sectionRef.current,
-      { opacity: 0 },
-      {
-        opacity: 1,
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top center',
-          end: 'bottom center',
-          scrub: true,
-        },
-      }
-    );
-
-    // 컨텐츠 슬라이드 인 효과
-    gsap.fromTo(
-      contentRef.current,
-      { x: -100, opacity: 0 },
-      {
-        x: 0,
-        opacity: 1,
-        scrollTrigger: {
-          trigger: contentRef.current,
-          start: 'top 80%',
-          end: 'top 20%',
-          scrub: 1,
-        },
-      }
-    );
-  }, [isMounted]);
-
-  if (!isMounted) {
-    return null;
-  }
+  const imageRef = useRef<HTMLImageElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
 
   return (
-    <section 
+    <div 
       ref={sectionRef}
-      className="min-h-screen relative flex items-center"
+      style={{ 
+        width: '100vw', 
+        height: '100vh',
+        position: 'relative',
+        scrollSnapAlign: 'start',
+        scrollSnapStop: 'always',
+        overflow: 'hidden'
+      }}
     >
-      <div 
-        className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: `url(${background})` }}
-      />
-      <div className="absolute inset-0 bg-black/50" />
+      <div style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        overflow: 'hidden'
+      }}>
+        <img 
+          ref={imageRef}
+          src={background}
+          alt=""
+          style={{
+            width: '100%',
+            height: '100%',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            objectFit: 'cover'
+          }}
+        />
+      </div>
       
-      <div ref={contentRef} className="relative z-10 max-w-4xl mx-auto p-8 text-white">
-        <div className="prose prose-invert">
-          <div className="mb-8">
-            <div className={`text-base mb-4 ${notoSansKr.className}`}>{content}</div>
-            <div className="relative inline-block">
-              <div className="absolute inset-0 bg-black/30 backdrop-blur-sm rounded-lg -m-2" />
-              <div className={`text-3xl text-gray-400 font-bold ${nanumPen.className} relative z-10 px-2`}>
-                "{summary}"
+      <div 
+        ref={overlayRef}
+        style={{
+          width: '100%',
+          height: '100%',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          zIndex: 1
+        }} 
+      />
+      
+      <div 
+        ref={contentRef}
+        style={{
+          width: '100%',
+          height: '100%',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: '#ffffff',
+          zIndex: 2
+        }}
+      >
+        <div style={{ maxWidth: '1200px', padding: '3rem', textAlign: 'center', width: '100%' }}>
+          <div style={{ 
+            maxHeight: 'calc(100vh - 8rem)', 
+            overflowY: 'auto',
+            padding: '2rem',
+            /* 스크롤바 스타일링 */
+            scrollbarWidth: 'thin',
+            scrollbarColor: 'rgba(255, 255, 255, 0.3) transparent',
+            msOverflowStyle: 'none'
+          }}>
+            <div style={{ marginBottom: '3rem' }}>
+              <div style={{ 
+                fontSize: '1.1rem', 
+                whiteSpace: 'pre-wrap', 
+                lineHeight: '1.8',
+                marginBottom: '2.5rem'
+              }}>
+                {content}
               </div>
+              {summary && (
+                <div style={{ 
+                  position: 'relative',
+                  display: 'inline-block',
+                  marginTop: '2rem',
+                  padding: '1rem 3rem'
+                }}>
+                  <div style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                    backgroundColor: 'rgba(255, 255, 255, 0.35)',
+                    backdropFilter: 'blur(2px)',
+                    borderRadius: '4px'
+                  }} />
+                  <div style={{ 
+                    position: 'relative',
+                    fontSize: '1.8rem', 
+                    fontFamily: '"East Sea Dokdo", serif',
+                    letterSpacing: '0.05em',
+                    color: '#000000'
+                  }}>
+                    "{summary}"
+                  </div>
+                </div>
+              )}
             </div>
+            
+            {media && media.length > 0 && (
+              <div style={{ maxWidth: '1000px', margin: '0 auto', width: '100%' }}>
+                {media.map((item, index) => (
+                  <MediaContent key={index} media={item} />
+                ))}
+              </div>
+            )}
           </div>
-          
-          {media && media.length > 0 && (
-            <div className="space-y-8">
-              {media.map((item, index) => (
-                <MediaContent key={index} media={item} />
-              ))}
-            </div>
-          )}
         </div>
       </div>
-    </section>
+    </div>
   );
 }
