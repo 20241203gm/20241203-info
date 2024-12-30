@@ -170,21 +170,28 @@ const StorySection: React.FC<Story> = ({
           top: 0,
           left: 0,
           display: 'flex',
-          alignItems: 'center',
+          alignItems: 'flex-start',
           justifyContent: 'center',
-          padding: '2rem'
+          padding: 'clamp(1rem, 5vh, 3rem)',
+          overflowY: 'auto',
+          boxSizing: 'border-box'
         }}
+        className="story-content-scroll"
       >
         <div style={{ 
-          maxWidth: '1200px',
+          maxWidth: 'min(900px, 75%)',
           width: '100%',
           backgroundColor: 'rgba(0, 0, 0, 0.8)',
-          padding: '1.5rem', 
-          borderRadius: '1rem'
+          padding: 'clamp(1.5rem, 4vw, 2.5rem)',
+          borderRadius: '1rem',
+          margin: '0 auto',
+          minHeight: 'min-content',
+          height: 'auto',
+          overflowY: 'visible'
         }}>
           <div>
             <pre style={{ 
-              fontSize: '1rem',
+              fontSize: 'clamp(0.875rem, 3vw, 1rem)',
               color: '#FFFFFF',
               lineHeight: '1.6',
               fontWeight: '200',
@@ -192,19 +199,21 @@ const StorySection: React.FC<Story> = ({
               wordBreak: 'keep-all',
               textAlign: 'left',
               margin: 0,
-              fontFamily: "'Noto Sans KR', sans-serif"
+              fontFamily: "'Noto Sans KR', sans-serif",
+              width: '100%'
             }}>
               {content}
             </pre>
             {summary && (
               <div style={{ 
-                fontSize: '1.7rem', 
+                fontSize: 'clamp(1.5rem, 5vw, 1.7rem)', 
                 fontWeight: 'normal', 
-                marginTop: '1.5rem',
+                marginTop: '2rem',
                 color: '#FFFFFF',
                 wordBreak: 'keep-all',
                 textAlign: 'center',
-                fontFamily: "'East Sea Dokdo', cursive"
+                fontFamily: "'East Sea Dokdo', cursive",
+                padding: '0 clamp(1rem, 3vw, 2rem)'
               }}>
                 "{summary}"
               </div>
@@ -212,7 +221,11 @@ const StorySection: React.FC<Story> = ({
           </div>
           
           {media && media.length > 0 && (
-            <div style={{ width: '100%', marginTop: '1.5rem' }}>
+            <div style={{ 
+              width: '100%', 
+              marginTop: '2rem',
+              maxWidth: '100%'
+            }}>
               <MediaContent media={media} />
             </div>
           )}
