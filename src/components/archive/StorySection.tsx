@@ -184,7 +184,7 @@ const StorySection: React.FC<Story> = ({
           backgroundColor: 'rgba(0, 0, 0, 0.8)',
           padding: 'clamp(1.5rem, 4vw, 2.5rem)',
           borderRadius: '1rem',
-          margin: '0 auto',
+          margin: '2rem auto',
           minHeight: 'min-content',
           height: 'auto',
           overflowY: 'visible'
