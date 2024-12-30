@@ -1,4 +1,9 @@
-export const dynamic = 'force-static'
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: '아카이브 - 20241203.info',
+  description: '시민활동 아카이브',
+};
 
 export default function ArchivePage() {
   return (
