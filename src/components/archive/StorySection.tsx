@@ -17,7 +17,6 @@ interface StorySectionProps {
 export default function StorySection({ background, content, media, summary }: StorySectionProps) {
   const mediaItem = media && media[0];
   const contentHeight = mediaItem?.type === 'text' ? '40%' : '10%';
-  const totalHeight = '80vh'; // 전체 높이를 80vh로 제한
 
   return (
     <section style={{
@@ -26,9 +25,6 @@ export default function StorySection({ background, content, media, summary }: St
       position: 'relative',
       scrollSnapAlign: 'start',
       overflow: 'hidden',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
     }}>
       {/* 배경 이미지 */}
       <div style={{
@@ -54,14 +50,17 @@ export default function StorySection({ background, content, media, summary }: St
 
       {/* 콘텐츠 컨테이너 */}
       <div style={{
-        position: 'relative',
-        zIndex: 1,
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
         width: 'min(900px, 75%)',
-        height: totalHeight,
+        height: '80vh',
         display: 'flex',
         flexDirection: 'column',
         gap: '2vh',
         color: 'white',
+        zIndex: 1,
       }}>
         {/* 설명 섹션 */}
         <div 
