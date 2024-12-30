@@ -89,7 +89,14 @@ const getStoriesFromSheet = async () => {
           return url.startsWith('@') ? url.substring(1) : url;
         };
 
-        const [rawBackground = '', content = '', mediaType = '', rawMediaUrl = '', mediaCaption = '', summary = ''] = row;
+        const [
+          rawBackground = '',   // A열: 배경 이미지
+          content = '',         // B열: 내용
+          mediaType = '',       // C열: 미디어 타입
+          rawMediaUrl = '',     // D열: 미디어 URL
+          mediaCaption = '',    // E열: 미디어 설명
+          summary = ''          // F열: 요약
+        ] = row;
         
         const background = cleanUrl(rawBackground);
         const mediaUrl = cleanUrl(rawMediaUrl);
@@ -105,20 +112,20 @@ const getStoriesFromSheet = async () => {
 
         const media: Media[] = [];
 
-        if (mediaUrl && mediaType) {
+        if (mediaUrl) {
           console.log(`Row ${index} has media:`, { mediaType, mediaUrl, mediaCaption });
           media.push({
-            type: (mediaType || 'text') as 'video' | 'image' | 'text',
+            type: (mediaType || 'image') as 'video' | 'image' | 'text',  // 기본값을 'image'로 설정
             url: mediaUrl,
-            caption: mediaCaption || '',
+            caption: mediaCaption || ''
           });
         }
 
         const story: Story = {
-          background: background || '',
-          content: content || '',
-          media,
-          summary: summary || '',
+          background,           // 배경 이미지 URL
+          content: content || '', // 내용
+          media,                // 미디어 배열
+          summary: summary || '' // 요약
         };
 
         console.log(`Processed story ${index}:`, JSON.stringify(story, null, 2));
