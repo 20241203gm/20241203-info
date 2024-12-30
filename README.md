@@ -1,57 +1,227 @@
-<<<<<<< HEAD
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# PRD 문서: 20241203.info
 
-## Getting Started
+## 1. 기획의도
 
-First, run the development server:
+1. 2024년 12월 3일 윤석열 대통령의 계엄령으로 인해 발생한 민주주의 헌정 파괴와 그 이후의 정치적 사건들을 기록한다.
+2. 계엄령이 왜 발생했으며, 그 실패 원인을 분석하고 기록한다.
+3. 이후 벌어진 정치적 사건들을 통해 윤석열 대통령의 직무 박탈, 체포, 구속을 방해한 인물 및 단체를 기록한다.
+4. 계엄 시행자, 적극 가담자, 옹호자 및 방해자를 역사에 기록하여 이들이 대한민국 정치사에 다시는 발을 들이지 못하도록 한다.
+5. 계엄령 이후 대한민국 시민들의 활동을 기록하고, 이들이 원하는 사회와 이를 실현해가는 과정을 문서화한다.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 2. 메뉴구성
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+1. **타임라인 구성**
+    - 계엄령과 이후 정치상황에 대한 시간순 사건 정리.
+        
+2. **위키형식 데이터베이스**
+    - 타임라인과 각 인물들의 언행을 데이터베이스화.
+    - 문서, 뉴스 기사, 유튜브 클립 등 증거 자료 포함.
+        
+3. **시민 활동 인터랙티브 아카이브**
+    - 스크롤 기반 스토리텔링으로 주요 사건과 시민 활동 연계
+        - 스크롤에 따라 배경 이미지/영상 전환
+        - 텍스트, 이미지, 영상이 자연스럽게 페이드인/아웃
+        - 주요 시점마다 시민들의 증언 강조
+    - SNS 활동 실시간 집계
+        - 해시태그별 게시물 수 실시간 카운팅
+        - 주요 키워드 워드클라우드
+        - 영향력 있는 게시물 하이라이트
+    - 시각화된 통계 데이터
+        - 시간대별 참여 인원 그래프
+        - 활동 유형별 분포도
+        - 지역별 참여 현황
+        
+4. **데이터 제출 시스템**
+    - 사이트 방문자가 기록 내용을 제출할 수 있도록 함.
+    - 관리자가 승인 후 데이터베이스에 반영.
+        
+5. **기획의도 페이지 구성**
+    - 사이트의 목적과 의도를 명확하게 전달.
+        
+6. **후원 시스템 구축**
+    - 후원 및 운영참여 방식 제공.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 3. 제작 방법
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. **데이터베이스 구축**
+    - 구글시트를 이용하여 데이터 저장 및 관리.
+    - 시트 내 각 열을 고유 ID, 제목, 내용, 날짜, 증거 자료 링크 등으로 구성.
+    - 스크립트(API 또는 Apps Script)를 사용하여 구글시트 데이터를 JSON 형식으로 제공.
+        
+2. **위키형식 출력**
+    - 노션 데이터베이스와 구글시트를 연동.
+    - API 연동 또는 Zapier를 활용하여 구글시트에서 데이터를 자동으로 노션에 업데이트.
+    - 노션의 퍼블릭 페이지 기능을 이용하여 위키 스타일로 출력.
+        
+3. **코딩 최소화**
+    - HTML과 CSS를 활용한 간단한 프런트엔드 제작.
+    - 구글 사이트(Google Sites) 또는 노션을 통해 웹페이지 구성.
+        
+4. **타임라인 서비스 활용**
+    - Timeline.js 또는 Knight Lab Timeline을 이용하여 타임라인 구현.
+    - JSON 데이터를 Timeline.js 형식에 맞춰 변환하여 시각화.
+    - 타임라인에 필요한 이미지 및 동영상은 구글 드라이브 또는 유튜브 링크 활용.
+        
+5. **데이터 제출 및 관리**
+    - 구글 폼을 통해 사용자 데이터 제출 기능 구현.
+    - 제출된 데이터는 구글시트에 자동 기록.
+    - 관리자가 데이터를 검토 후 승인 처리.
+        
+6. **웹페이지 제작 및 도메인 연결**
+    - 구글 사이트 또는 노션을 사용하여 웹페이지 제작.
+    - 도메인 구입 후 도메인 포워딩 설정.
+    - HTTPS 지원 도메인 연결 서비스(예: Cloudflare) 활용.
+        
+7. **후원 시스템 구축**
+    - 플랫폼(예: 텀블벅, 카카오페이, PayPal 등)을 활용한 후원 페이지 연결.
+    - 후원 내역과 사용 계획을 투명하게 공개.
 
-## Learn More
+## 4. 서버 구성
 
-To learn more about Next.js, take a look at the following resources:
+1. **웹 호스팅**
+    - Vercel 또는 Netlify
+        - 무료 티어로 시작 가능
+        - 자동 HTTPS 지원
+        - GitHub 연동으로 자동 배포
+        - 서버리스 함수 지원
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+2. **데이터베이스**
+    - Supabase (PostgreSQL)
+        - 무료 티어: 500MB
+        - 실시간 데이터 지원
+        - 인증 시스템 내장
+        - REST/GraphQL API 자동 생성
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+3. **미디어 저장소**
+    - Cloudinary
+        - 무료 티어: 1GB 저장공간
+        - 이미지/비디오 최적화
+        - URL 기반 이미지 변환
+    
+4. **프론트엔드 스택**
+    - Next.js
+        - React 기반 프레임워크
+        - SSR/SSG 지원
+        - API 라우트 내장
+    - GSAP + Intersection Observer
+        - 스크롤 기반 애니메이션
+        - 요소 등장 효과
+    
+5. **데이터 수집 및 관리**
+    - Google Sheets API
+        - 데이터 입력/관리용
+        - 관리자 승인 프로세스
+    - 간단한 서버리스 함수
+        - Vercel Edge Functions
+        - SNS 데이터 수집 및 가공
 
-## Deploy on Vercel
+6. **모니터링**
+    - Vercel Analytics
+        - 기본 성능 모니터링
+        - 사용자 행동 분석
+    - Sentry 무료 티어
+        - 에러 트래킹
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+예상 월 비용:
+- Vercel/Netlify: 무료
+- Supabase: 무료
+- Cloudinary: 무료
+- 도메인: 연 $10~20
+- (선택) Sentry: 무료
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-=======
-# 20241203.info
+총 예상 비용: 도메인 비용 외 거의 들지 않음
 
-2024년 12월 3일의 기록: 대한민국 민주주의 회복을 위한 아카이브
+장점:
+1. 서버 관리 불필요
+2. 자동 스케일링
+3. 높은 안정성
+4. 개발 복잡도 감소
+5. 인터랙티브 요소 유지
 
-## 개요
+단점:
+1. 일부 실시간 기능 제한
+2. 무료 티어 사용량 제한
+3. 커스터마이징 제약
 
-이 프로젝트는 2024년 12월 3일 발생한 계엄령과 그 이후의 정치적 사건들을 기록하고, 대한민국 민주주의의 회복 과정을 담아내는 것을 목표로 합니다.
+필요시 나중에 AWS나 GCP로 마이그레이션 가능합니다.
 
-## 기술 스택
+## 5. 개발 철학 및 AI 활용
+
+### 개발 접근 방식
+1. **AI 주도 개발**
+    - 개발자는 프로그래밍 경험이 없는 상태에서 시작
+    - AI의 상세한 가이드를 통해 단계적으로 학습하며 개발
+    - 각 개발 단계마다 AI의 설명을 통해 전체 맥락 이해
+
+2. **학습 중심 개발 프로세스**
+    - 모든 코드 작성과 기술 결정에 대한 상세한 설명 필요
+    - 각 기능의 구현이 전체 시스템에서 갖는 의미 설명
+    - 결정된 기술 스택이 왜 선택되었는지에 대한 이해
+
+3. **AI 커뮤니케이션 가이드라인**
+    - AI는 모든 설명을 초보자 수준에서 시작
+    - 전체 시스템 구조 내에서 현재 작업의 위치와 역할 설명
+    - 코드 작성시 주석을 통한 상세한 설명 포함
+    - 에러 발생시 문제 해결 과정을 학습 기회로 활용
+    - 중요한 변화가 있을 때마다 DEVLOG.md에 자세히 기록
+        - 주요 설정이나 환경 구성 변경
+        - 새로운 기능 구현 과정
+        - 문제 해결 과정과 학습 포인트
+        - 중요한 의사결정 사항
+        - 새롭게 학습한 개념이나 기술
+
+4. **단계별 학습 목표**
+    - 기본 웹 개발 개념 이해
+    - React와 Next.js 프레임워크의 기본 원리 습득
+    - 데이터베이스 설계와 API 통신 이해
+    - 배포 프로세스와 서버 운영 기초 습득
+
+5. **문서화 요구사항**
+    - 모든 개발 과정은 학습 자료로 문서화
+    - 결정 사항에 대한 이유와 대안 기록
+    - 발생한 문제와 해결 과정 정리
+    - 새로 학습한 개념에 대한 설명 포함
+
+### AI 지원 범위
+1. **코드 작성 지원**
+    - 상세한 코드 설명과 함께 구현 방법 제시
+    - 코드의 각 부분이 어떤 역할을 하는지 설명
+    - 더 나은 구현 방법에 대한 제안
+
+2. **아키텍처 설계**
+    - 시스템 구조 설계에 대한 이유 설명
+    - 각 컴포넌트의 역할과 상호작용 방식 설명
+    - 확장성과 유지보수성을 고려한 설계 제안
+
+3. **문제 해결 가이드**
+    - 에러 메시지 해석 및 해결 방법 제시
+    - 디버깅 프로세스 상세 설명
+    - 문제 해결을 위한 단계별 접근 방법 안내
+
+4. **학습 로드맵 제공**
+    - 프로젝트 진행에 필요한 기술 학습 순서 제시
+    - 각 단계별 필요한 학습 자료 추천
+    - 실제 적용을 통한 학습 기회 제공
+
+### 기대 효과
+1. 프로젝트 진행과 동시에 개발 역량 향상
+2. AI의 상세한 설명을 통한 깊이 있는 이해
+3. 실제 프로젝트 경험을 통한 실무 능력 습득
+4. 문제 해결 능력과 디버깅 스킬 향상
+5. 지속적인 학습과 성장 가능한 개발 환경 구축
+
+---
+
+## 개발 정보
+
+### 기술 스택
 
 - Frontend: Next.js, GSAP, D3.js
 - Database: Supabase
 - Hosting: Vercel
 - Media Storage: Cloudinary
 
-## 개발 환경 설정
+### 개발 환경 설정
 
 1. 저장소 클론
 ```bash
@@ -68,4 +238,10 @@ npm install
 ```bash
 npm run dev
 ```
->>>>>>> 14d5b750e3e2c07cf1e56275fce352df64917f84
+
+개발 서버가 실행되면 [http://localhost:3000](http://localhost:3000)에서 결과를 확인할 수 있습니다.
+
+### 추가 문서
+
+- [Next.js 문서](https://nextjs.org/docs)
+- [프로젝트 배포 가이드](https://nextjs.org/docs/app/building-your-application/deploying)
