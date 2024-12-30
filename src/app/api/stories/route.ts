@@ -25,6 +25,7 @@ const getStoriesFromSheet = async () => {
     let parsedCredentials;
     try {
       parsedCredentials = JSON.parse(credentials);
+      console.log('Service account email:', parsedCredentials.client_email);
     } catch (e: any) {
       throw new Error('Failed to parse GOOGLE_SHEETS_CREDENTIALS: ' + e.message);
     }
@@ -41,49 +42,61 @@ const getStoriesFromSheet = async () => {
 
     console.log('Fetching data from sheet...');
     console.log('Sheet ID:', sheetId);
-    const response = await sheets.spreadsheets.values.get({
-      spreadsheetId: sheetId,
-      range: 'Sheet1!A2:G',
-    });
+    try {
+      const response = await sheets.spreadsheets.values.get({
+        spreadsheetId: sheetId,
+        range: 'Sheet1!A2:G',
+      });
+      
+      console.log('API Response:', JSON.stringify(response.data, null, 2));
 
-    const rows = response.data.values;
-    if (!rows || rows.length === 0) {
-      console.log('No data found in sheet');
-      return [];
+      const rows = response.data.values;
+      if (!rows || rows.length === 0) {
+        console.log('No data found in sheet');
+        return [];
+      }
+
+      console.log('Raw data from sheets:', JSON.stringify(rows, null, 2));
+      console.log('Processing rows...');
+
+      const stories: Story[] = rows.map((row) => {
+        if (!Array.isArray(row) || row.length < 6) {
+          console.warn('Invalid row format:', row);
+          return null;
+        }
+
+        const [background, content, mediaType, mediaUrl, mediaCaption, summary] = row;
+        const media: Media[] = [];
+
+        if (mediaUrl && mediaCaption) {
+          media.push({
+            type: mediaType as 'video' | 'image' | 'text',
+            url: mediaUrl,
+            caption: mediaCaption,
+          });
+        }
+
+        const story: Story = {
+          background,
+          content,
+          media,
+          summary,
+        };
+
+        console.log('Processed story:', JSON.stringify(story, null, 2));
+        return story;
+      }).filter(Boolean) as Story[];
+
+      return stories;
+    } catch (error) {
+      console.error('Error in getStoriesFromSheet:', error);
+      if (error instanceof Error) {
+        console.error('Error name:', error.name);
+        console.error('Error message:', error.message);
+        console.error('Error stack:', error.stack);
+      }
+      throw error;
     }
-
-    console.log('Raw data from sheets:', JSON.stringify(rows, null, 2));
-    console.log('Processing rows...');
-
-    const stories: Story[] = rows.map((row) => {
-      if (!Array.isArray(row) || row.length < 6) {
-        console.warn('Invalid row format:', row);
-        return null;
-      }
-
-      const [background, content, mediaType, mediaUrl, mediaCaption, summary] = row;
-      const media: Media[] = [];
-
-      if (mediaUrl && mediaCaption) {
-        media.push({
-          type: mediaType as 'video' | 'image' | 'text',
-          url: mediaUrl,
-          caption: mediaCaption,
-        });
-      }
-
-      const story: Story = {
-        background,
-        content,
-        media,
-        summary,
-      };
-
-      console.log('Processed story:', JSON.stringify(story, null, 2));
-      return story;
-    }).filter(Boolean) as Story[];
-
-    return stories;
   } catch (error) {
     console.error('Error in getStoriesFromSheet:', error);
     if (error instanceof Error) {
