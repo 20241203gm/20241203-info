@@ -84,7 +84,16 @@ const getStoriesFromSheet = async () => {
           return null;
         }
 
-        const [background = '', content = '', mediaType = '', mediaUrl = '', mediaCaption = '', summary = ''] = row;
+        const cleanUrl = (url: string) => {
+          if (!url) return '';
+          return url.startsWith('@') ? url.substring(1) : url;
+        };
+
+        const [rawBackground = '', content = '', mediaType = '', rawMediaUrl = '', mediaCaption = '', summary = ''] = row;
+        
+        const background = cleanUrl(rawBackground);
+        const mediaUrl = cleanUrl(rawMediaUrl);
+
         console.log(`Row ${index} fields:`, {
           background,
           content,
