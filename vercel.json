@@ -1,5 +1,13 @@
 {
   "version": 2,
   "buildCommand": "npm run build",
-  "cleanUrls": true
+  "installCommand": "npm install",
+  "framework": "nextjs",
+  "cleanUrls": true,
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/next"
+    }
+  ]
 } 
