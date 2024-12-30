@@ -409,3 +409,14 @@ npm install googleapis
 - 구글 시트 데이터 유효성 검사 설정
   - 미디어타입 열에 드롭다운 메뉴 추가
   - 잘못된 입력 방지 
+
+### 2024-12-30 - Vercel 배포
+1. GitHub 저장소 연결
+2. 환경 변수 설정
+   - Google Sheets API 인증 정보
+   - 시트 ID
+3. 배포 URL: https://20241203-info.vercel.app
+4. 배포 완료 및 확인
+   - 페이지 로드 확인
+   - 데이터 연동 확인
+   - 반응형 디자인 테스트 
