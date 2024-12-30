@@ -188,7 +188,7 @@ export default function StorySection({ background, content, media, summary }: St
               textAlign: 'center',
             }}
           >
-            {summary}
+            "{summary}"
           </div>
         )}
       </div>
