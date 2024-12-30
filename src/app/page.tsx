@@ -18,11 +18,23 @@ export default function HomePage() {
         console.log('Client: Response status:', response.status);
         
         const data = await response.json();
-        console.log('Client: Response data:', data);
+        console.log('Client: Response data:', JSON.stringify(data, null, 2));
         
         if (!response.ok) {
           throw new Error(`Failed to fetch stories: ${response.status}\nDetails: ${JSON.stringify(data, null, 2)}`);
         }
+
+        if (!Array.isArray(data)) {
+          console.error('Invalid data format:', data);
+          throw new Error('Invalid data format: expected an array');
+        }
+
+        data.forEach((story, index) => {
+          console.log(`Story ${index}:`, JSON.stringify(story, null, 2));
+          if (!story.background || !story.content) {
+            console.error(`Invalid story at index ${index}:`, story);
+          }
+        });
 
         setStories(data);
       } catch (error) {
