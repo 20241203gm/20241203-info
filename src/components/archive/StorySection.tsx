@@ -139,8 +139,35 @@ export default function StorySection({ background, content, media, summary }: St
                   fontSize: '0.875rem',
                   color: 'rgba(255, 255, 255, 0.8)',
                   marginTop: '0.5rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '1rem',
                 }}>
-                  {item.caption}
+                  <span>{item.caption}</span>
+                  <a
+                    href={item.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      backgroundColor: 'white',
+                      color: 'black',
+                      padding: '0.25rem 0.75rem',
+                      borderRadius: '0.25rem',
+                      fontSize: '0.75rem',
+                      textDecoration: 'none',
+                      fontWeight: 500,
+                      transition: 'opacity 0.2s',
+                      opacity: 0.9,
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.opacity = '1';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.opacity = '0.9';
+                    }}
+                  >
+                    원본보기
+                  </a>
                 </div>
               )}
             </div>
