@@ -158,6 +158,7 @@ export default function StorySection({ background, content, media, summary }: St
               fontFamily: "'East Sea Dokdo', cursive",
               fontSize: '1.7rem',
               lineHeight: 1.4,
+              textAlign: 'center',
             }}
           >
             {summary}
