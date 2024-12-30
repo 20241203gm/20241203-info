@@ -121,18 +121,40 @@ export default function StorySection({ background, content, media, summary }: St
                 />
               )}
               {item.type === 'text' && (
-                <a
-                  href={item.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    color: '#60A5FA',
-                    textDecoration: 'underline',
-                    fontSize: '1rem',
-                  }}
-                >
-                  {item.caption || item.url}
-                </a>
+                <div style={{
+                  fontSize: '0.875rem',
+                  color: 'rgba(255, 255, 255, 0.8)',
+                  marginTop: '0.5rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '1rem',
+                }}>
+                  <span>{item.caption || '관련 링크'}</span>
+                  <a
+                    href={item.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      backgroundColor: 'white',
+                      color: 'black',
+                      padding: '0.25rem 0.75rem',
+                      borderRadius: '0.25rem',
+                      fontSize: '0.75rem',
+                      textDecoration: 'none',
+                      fontWeight: 500,
+                      transition: 'opacity 0.2s',
+                      opacity: 0.9,
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.opacity = '1';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.opacity = '0.9';
+                    }}
+                  >
+                    원본보기
+                  </a>
+                </div>
               )}
               {item.caption && item.type !== 'text' && (
                 <div style={{
