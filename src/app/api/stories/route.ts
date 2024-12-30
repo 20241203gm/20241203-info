@@ -89,6 +89,26 @@ const getStoriesFromSheet = async () => {
           return url.startsWith('@') ? url.substring(1) : url;
         };
 
+        const getYoutubeEmbedUrl = (url: string) => {
+          if (!url) return '';
+          
+          // 라이브 스트림 URL 처리
+          if (url.includes('live/')) {
+            const videoId = url.split('live/')[1].split('?')[0];
+            return `https://www.youtube.com/embed/${videoId}`;
+          }
+          
+          // 일반적인 YouTube URL 처리
+          const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+          const match = url.match(regExp);
+          
+          if (match && match[2].length === 11) {
+            return `https://www.youtube.com/embed/${match[2]}`;
+          }
+          
+          return url;
+        };
+
         const [
           _unused = '',        // A열: 무시
           imageUrl = '',       // B열: 이미지 URL (background로 사용)
@@ -100,7 +120,7 @@ const getStoriesFromSheet = async () => {
         ] = row;
         
         const background = cleanUrl(imageUrl);
-        const cleanMediaUrl = cleanUrl(mediaUrl);
+        const cleanMediaUrl = mediaType === 'video' ? getYoutubeEmbedUrl(cleanUrl(mediaUrl)) : cleanUrl(mediaUrl);
 
         console.log(`Row ${index} fields:`, {
           background,
