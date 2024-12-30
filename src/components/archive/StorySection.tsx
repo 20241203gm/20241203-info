@@ -25,6 +25,9 @@ export default function StorySection({ background, content, media, summary }: St
       position: 'relative',
       scrollSnapAlign: 'start',
       overflow: 'hidden',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
     }}>
       {/* 배경 이미지 */}
       <div style={{
@@ -50,10 +53,6 @@ export default function StorySection({ background, content, media, summary }: St
 
       {/* 콘텐츠 컨테이너 */}
       <div style={{
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
         width: 'min(900px, 75%)',
         height: '80vh',
         display: 'flex',
@@ -125,15 +124,15 @@ export default function StorySection({ background, content, media, summary }: St
             height: '10%',
             display: 'flex',
             alignItems: 'center',
-            padding: 'clamp(1rem, 3vw, 2rem)',
-            gap: '0.5rem',
+            padding: '0 clamp(1rem, 3vw, 2rem)',
           }}>
             <p style={{
               fontSize: '0.9rem',
               fontFamily: "'Noto Sans KR', sans-serif",
               fontWeight: '200',
               flex: 1,
-              marginRight: 0,
+              margin: 0,
+              paddingRight: '0.5rem',
             }}>
               {mediaItem.caption}
             </p>
@@ -153,6 +152,7 @@ export default function StorySection({ background, content, media, summary }: St
                 opacity: 0.9,
                 transition: 'opacity 0.2s',
                 whiteSpace: 'nowrap',
+                flexShrink: 0,
               }}
               onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
               onMouseLeave={(e) => e.currentTarget.style.opacity = '0.9'}
