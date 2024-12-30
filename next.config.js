@@ -2,6 +2,8 @@
 const nextConfig = {
   experimental: {
   },
+  trailingSlash: false,
+  pageExtensions: ['js', 'jsx', 'ts', 'tsx'],
 }
 
 module.exports = nextConfig 
