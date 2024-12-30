@@ -119,11 +119,35 @@ export async function GET() {
     console.error('API: Failed to fetch stories:', error);
     console.error('API: Error message:', error.message);
     console.error('API: Error stack:', error.stack);
+    
+    interface ErrorDetails {
+      message: string;
+      stack?: string;
+      name: string;
+      status?: number;
+      statusText?: string;
+      data?: any;
+    }
+
+    let errorDetails: ErrorDetails = {
+      message: error.message,
+      stack: error.stack,
+      name: error.name
+    };
+
+    if (error.response) {
+      errorDetails = {
+        ...errorDetails,
+        status: error.response.status,
+        statusText: error.response.statusText,
+        data: error.response.data
+      };
+    }
+
     return NextResponse.json(
       { 
-        error: 'Failed to fetch stories', 
-        details: error.message,
-        stack: error.stack 
+        error: 'Failed to fetch stories',
+        details: errorDetails
       },
       { status: 500 }
     );
