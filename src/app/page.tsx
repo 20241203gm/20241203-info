@@ -14,7 +14,9 @@ export default function HomePage() {
       console.log('Client: Starting to load stories');
       try {
         setLoading(true);
-        const response = await fetch('/api/stories');
+        const response = await fetch('/api/stories', {
+          cache: 'no-store'
+        });
         console.log('Client: Response status:', response.status);
         
         const data = await response.json();

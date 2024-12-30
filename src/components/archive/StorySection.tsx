@@ -16,6 +16,8 @@ interface StorySectionProps {
 
 export default function StorySection({ background, content, media, summary }: StorySectionProps) {
   const mediaItem = media && media[0];
+  const contentHeight = mediaItem?.type === 'text' ? '40%' : '10%';
+  const totalHeight = '80vh'; // 전체 높이를 80vh로 제한
 
   return (
     <section style={{
@@ -26,6 +28,7 @@ export default function StorySection({ background, content, media, summary }: St
       overflow: 'hidden',
       display: 'flex',
       alignItems: 'center',
+      justifyContent: 'center',
     }}>
       {/* 배경 이미지 */}
       <div style={{
@@ -54,11 +57,9 @@ export default function StorySection({ background, content, media, summary }: St
         position: 'relative',
         zIndex: 1,
         width: 'min(900px, 75%)',
-        height: '90%',
-        margin: '0 auto',
+        height: totalHeight,
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'center',
         gap: '2vh',
         color: 'white',
       }}>
@@ -66,7 +67,7 @@ export default function StorySection({ background, content, media, summary }: St
         <div 
           className="story-content-scroll"
           style={{
-            height: mediaItem?.type === 'text' ? '40%' : '10%',
+            height: contentHeight,
             padding: 'clamp(1rem, 3vw, 2rem)',
             overflowY: 'auto',
           }}
@@ -167,18 +168,26 @@ export default function StorySection({ background, content, media, summary }: St
           alignItems: 'center',
           justifyContent: 'center',
         }}>
-          <div style={{
-            backgroundColor: 'rgba(255, 255, 255, 0.1)',
-            padding: 'clamp(1rem, 3vw, 2rem)',
-            borderRadius: '0.5rem',
-            fontSize: '1.7rem',
-            fontFamily: "'East Sea Dokdo', cursive",
-            textAlign: 'center',
-            whiteSpace: 'pre-wrap',
-            wordBreak: 'keep-all',
-            lineHeight: '1.3',
-          }}>
-            "{summary}"
+          <div 
+            className="story-content-scroll"
+            style={{
+              backgroundColor: 'rgba(255, 255, 255, 0.1)',
+              padding: 'clamp(1rem, 3vw, 2rem)',
+              borderRadius: '0.5rem',
+              maxHeight: '100%',
+              overflowY: 'auto',
+            }}
+          >
+            <div style={{
+              fontSize: '1.7rem',
+              fontFamily: "'East Sea Dokdo', cursive",
+              textAlign: 'center',
+              whiteSpace: 'pre-wrap',
+              wordBreak: 'keep-all',
+              lineHeight: '1.3',
+            }}>
+              "{summary}"
+            </div>
           </div>
         </div>
       </div>
