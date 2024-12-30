@@ -156,7 +156,7 @@ export default function StorySection({ background, content, media, summary }: St
               backgroundColor: 'rgba(255, 255, 255, 0.1)',
               borderRadius: '0.5rem',
               fontFamily: "'East Sea Dokdo', cursive",
-              fontSize: '1.125rem',
+              fontSize: '1.7rem',
               lineHeight: 1.4,
             }}
           >
