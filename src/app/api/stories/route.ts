@@ -115,7 +115,7 @@ const getStoriesFromSheet = async () => {
         if (mediaUrl) {
           console.log(`Row ${index} has media:`, { mediaType, mediaUrl, mediaCaption });
           media.push({
-            type: (mediaType || 'image') as 'video' | 'image' | 'text',  // 기본값을 'image'로 설정
+            type: (mediaType || 'image') as 'video' | 'image' | 'text',
             url: mediaUrl,
             caption: mediaCaption || ''
           });
