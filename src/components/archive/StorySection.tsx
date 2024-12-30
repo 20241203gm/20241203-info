@@ -9,6 +9,14 @@ gsap.registerPlugin(ScrollTrigger);
 
 const MediaContent = ({ media }: { media: Media[] }) => {
   const getYoutubeEmbedUrl = (url: string) => {
+    // 라이브 스트림 타임스탬프 처리
+    if (url.includes('live/')) {
+      const videoId = url.split('live/')[1].split('?')[0];
+      const timestamp = url.includes('?t=') ? url.split('?t=')[1] : '';
+      return `https://www.youtube.com/embed/${videoId}${timestamp ? `?start=${timestamp}` : ''}`;
+    }
+
+    // 일반적인 유튜브 URL 처리
     const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
     const match = url.match(regExp);
     
@@ -39,6 +47,8 @@ const MediaContent = ({ media }: { media: Media[] }) => {
           );
         } else if (item.type === 'video') {
           const embedUrl = getYoutubeEmbedUrl(item.url);
+          console.log('Original URL:', item.url);
+          console.log('Embed URL:', embedUrl);
           return (
             <div key={index} style={{ 
               position: 'relative',
@@ -177,22 +187,24 @@ const StorySection: React.FC<Story> = ({
               fontSize: '1rem',
               color: '#FFFFFF',
               lineHeight: '1.6',
-              fontWeight: '400',
+              fontWeight: '200',
               whiteSpace: 'pre-wrap',
               wordBreak: 'keep-all',
               textAlign: 'left',
-              margin: 0
+              margin: 0,
+              fontFamily: "'Noto Sans KR', sans-serif"
             }}>
               {content}
             </pre>
             {summary && (
               <div style={{ 
-                fontSize: '1.125rem', 
-                fontWeight: 'bold', 
+                fontSize: '1.7rem', 
+                fontWeight: 'normal', 
                 marginTop: '1.5rem',
                 color: '#FFFFFF',
                 wordBreak: 'keep-all',
-                textAlign: 'left'
+                textAlign: 'center',
+                fontFamily: "'East Sea Dokdo', cursive"
               }}>
                 "{summary}"
               </div>
