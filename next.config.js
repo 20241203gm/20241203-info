@@ -1,9 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-  },
-  trailingSlash: false,
-  pageExtensions: ['js', 'jsx', 'ts', 'tsx'],
+  // 모든 실험적 기능과 추가 설정 제거
 }
 
 module.exports = nextConfig 
