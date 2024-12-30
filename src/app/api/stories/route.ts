@@ -92,39 +92,41 @@ const getStoriesFromSheet = async () => {
         const [
           _unused = '',        // A열: 무시
           imageUrl = '',       // B열: 이미지 URL (background로 사용)
-          mediaType = '',      // C열: 미디어 타입
-          rawMediaUrl = '',    // D열: 미디어 URL
-          mediaCaption = '',   // E열: 미디어 설명
-          summary = ''         // F열: 요약
+          content = '',        // C열: 메인 컨텐츠 내용
+          mediaType = '',      // D열: 미디어 타입
+          mediaUrl = '',       // E열: 미디어 URL
+          mediaCaption = '',   // F열: 미디어 설명
+          summary = ''         // G열: 컨텐츠 요약
         ] = row;
         
         const background = cleanUrl(imageUrl);
-        const mediaUrl = cleanUrl(rawMediaUrl);
+        const cleanMediaUrl = cleanUrl(mediaUrl);
 
         console.log(`Row ${index} fields:`, {
           background,
+          content,
           mediaType,
-          mediaUrl,
+          mediaUrl: cleanMediaUrl,
           mediaCaption,
           summary
         });
 
         const media: Media[] = [];
 
-        if (mediaUrl) {
-          console.log(`Row ${index} has media:`, { mediaType, mediaUrl, mediaCaption });
+        if (cleanMediaUrl) {
+          console.log(`Row ${index} has media:`, { mediaType, mediaUrl: cleanMediaUrl, mediaCaption });
           media.push({
             type: (mediaType || 'image') as 'video' | 'image' | 'text',
-            url: mediaUrl,
+            url: cleanMediaUrl,
             caption: mediaCaption || ''
           });
         }
 
         const story: Story = {
           background,          // B열의 이미지 URL을 배경으로 사용
-          content: '',         // 현재는 본문 내용 없음
-          media,              // 미디어 배열
-          summary: summary || '' // 요약
+          content,            // C열의 메인 컨텐츠 내용
+          media,              // 미디어 정보
+          summary: summary || '' // G열의 컨텐츠 요약
         };
 
         console.log(`Processed story ${index}:`, JSON.stringify(story, null, 2));
