@@ -1,27 +1,82 @@
-import Image from 'next/image';
+'use client';
 
-export default function Home() {
+import { useEffect, useState } from 'react';
+import StorySection from '@/components/archive/StorySection';
+import { Story } from '@/types/story';
+
+export default function ArchivePage() {
+  const [stories, setStories] = useState<Story[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function loadStories() {
+      console.log('Client: Starting to load stories');
+      try {
+        setLoading(true);
+        console.log('Client: Fetching stories from API...');
+        const response = await fetch('/api/stories');
+        console.log('Client: Response received:', response.status, response.statusText);
+        
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error('Client: API error response:', errorText);
+          throw new Error(`Failed to fetch stories: ${response.status} ${response.statusText}`);
+        }
+        
+        const data = await response.json();
+        console.log('Client: Stories data received:', data);
+        setStories(data);
+      } catch (err) {
+        console.error('Client: Failed to load stories:', err);
+        setError(err instanceof Error ? err.message : 'Failed to load stories');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadStories();
+  }, []);
+
+  if (loading) {
+    console.log('Client: Showing loading state');
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-xl">로딩 중...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    console.log('Client: Showing error state:', error);
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-xl text-red-500">에러: {error}</div>
+      </div>
+    );
+  }
+
+  if (stories.length === 0) {
+    console.log('Client: No stories found');
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-xl">아직 기록이 없습니다.</div>
+      </div>
+    );
+  }
+
+  console.log('Client: Rendering stories:', stories.length);
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <img
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={37}
-        />
-        <div className="flex flex-col gap-2">
-          <h1 className="text-xl font-bold">
-            2024년 12월 3일, 대한민국
-          </h1>
-          <p>
-            <a href="/archive" className="text-blue-500 hover:underline">
-              기록 보기
-            </a>
-          </p>
-        </div>
-      </main>
-    </div>
+    <main style={{
+      width: '100vw',
+      height: '100vh',
+      overflowY: 'scroll',
+      scrollSnapType: 'y mandatory',
+      scrollBehavior: 'smooth'
+    }}>
+      {stories.map((story, index) => (
+        <StorySection key={index} {...story} />
+      ))}
+    </main>
   );
-}
+} 
