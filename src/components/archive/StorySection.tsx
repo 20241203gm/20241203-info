@@ -15,6 +15,8 @@ interface StorySectionProps {
 }
 
 export default function StorySection({ background, content, media, summary }: StorySectionProps) {
+  const mediaItem = media && media[0];
+
   return (
     <section style={{
       width: '100vw',
@@ -52,17 +54,17 @@ export default function StorySection({ background, content, media, summary }: St
         width: 'min(900px, 75%)',
         height: '100%',
         margin: '0 auto',
-        padding: 'clamp(1.5rem, 4vw, 2.5rem)',
         display: 'flex',
         flexDirection: 'column',
-        gap: '2rem',
         color: 'white',
       }}>
-        {/* 내용 섹션 */}
+        {/* 설명 섹션 */}
         <div 
           className="story-content-scroll"
           style={{
-            flex: '1 1 40%',
+            height: mediaItem?.type === 'text' ? '40%' : '10%',
+            marginTop: '10%',
+            padding: 'clamp(1rem, 3vw, 2rem)',
             overflowY: 'auto',
           }}
         >
@@ -79,83 +81,91 @@ export default function StorySection({ background, content, media, summary }: St
         </div>
 
         {/* 미디어 섹션 */}
-        {media && media.length > 0 && (
+        {mediaItem && mediaItem.type !== 'text' && (
           <div 
-            className="story-content-scroll"
             style={{
-              flex: '1 1 30%',
-              overflowY: 'auto',
+              height: '40%',
               display: 'flex',
-              flexDirection: 'column',
-              gap: '1rem',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: 'clamp(1rem, 3vw, 2rem)',
             }}
           >
-            {media.map((item, index) => (
-              <div key={index} style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                {item.type === 'video' ? (
-                  <iframe
-                    src={item.url}
-                    style={{
-                      width: '100%',
-                      aspectRatio: '16/9',
-                      border: 'none',
-                    }}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  />
-                ) : item.type === 'image' ? (
-                  <img
-                    src={item.url}
-                    alt={item.caption}
-                    style={{
-                      width: '100%',
-                      height: 'auto',
-                      objectFit: 'contain',
-                    }}
-                  />
-                ) : null}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                  <p style={{
-                    fontSize: '0.9rem',
-                    fontFamily: "'Noto Sans KR', sans-serif",
-                    fontWeight: '200',
-                    flex: 1,
-                  }}>
-                    {item.caption}
-                  </p>
-                  <a
-                    href={item.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{
-                      padding: '0.5rem 1rem',
-                      backgroundColor: 'white',
-                      color: 'black',
-                      textDecoration: 'none',
-                      borderRadius: '4px',
-                      fontSize: '0.9rem',
-                      fontFamily: "'Noto Sans KR', sans-serif",
-                      fontWeight: '400',
-                      opacity: 0.9,
-                      transition: 'opacity 0.2s',
-                    }}
-                    onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
-                    onMouseLeave={(e) => e.currentTarget.style.opacity = '0.9'}
-                  >
-                    원본보기
-                  </a>
-                </div>
-              </div>
-            ))}
+            {mediaItem.type === 'video' ? (
+              <iframe
+                src={mediaItem.url}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  border: 'none',
+                }}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            ) : (
+              <img
+                src={mediaItem.url}
+                alt={mediaItem.caption}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'contain',
+                }}
+              />
+            )}
+          </div>
+        )}
+
+        {/* 미디어 설명 */}
+        {mediaItem && (
+          <div style={{
+            height: '10%',
+            display: 'flex',
+            alignItems: 'center',
+            padding: 'clamp(1rem, 3vw, 2rem)',
+            gap: '1rem',
+          }}>
+            <p style={{
+              fontSize: '0.9rem',
+              fontFamily: "'Noto Sans KR', sans-serif",
+              fontWeight: '200',
+              flex: 1,
+            }}>
+              {mediaItem.caption}
+            </p>
+            <a
+              href={mediaItem.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                padding: '0.5rem 1rem',
+                backgroundColor: 'white',
+                color: 'black',
+                textDecoration: 'none',
+                borderRadius: '4px',
+                fontSize: '0.9rem',
+                fontFamily: "'Noto Sans KR', sans-serif",
+                fontWeight: '400',
+                opacity: 0.9,
+                transition: 'opacity 0.2s',
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
+              onMouseLeave={(e) => e.currentTarget.style.opacity = '0.9'}
+            >
+              원본보기
+            </a>
           </div>
         )}
 
         {/* 요약 섹션 */}
         <div style={{
-          flex: '0 0 auto',
+          height: '30%',
           backgroundColor: 'rgba(255, 255, 255, 0.1)',
-          padding: '1rem clamp(0.75rem, 2vw, 1.5rem)',
+          padding: 'clamp(1rem, 3vw, 2rem)',
           borderRadius: '0.5rem',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
         }}>
           <div style={{
             fontSize: '1.7rem',
