@@ -126,13 +126,14 @@ export default function StorySection({ background, content, media, summary }: St
             display: 'flex',
             alignItems: 'center',
             padding: 'clamp(1rem, 3vw, 2rem)',
-            gap: '1rem',
+            gap: '0.5rem',
           }}>
             <p style={{
               fontSize: '0.9rem',
               fontFamily: "'Noto Sans KR', sans-serif",
               fontWeight: '200',
               flex: 1,
+              marginRight: 0,
             }}>
               {mediaItem.caption}
             </p>
@@ -141,7 +142,7 @@ export default function StorySection({ background, content, media, summary }: St
               target="_blank"
               rel="noopener noreferrer"
               style={{
-                padding: '0.5rem 1rem',
+                padding: '0.25rem 0.75rem',
                 backgroundColor: 'white',
                 color: 'black',
                 textDecoration: 'none',
@@ -151,6 +152,7 @@ export default function StorySection({ background, content, media, summary }: St
                 fontWeight: '400',
                 opacity: 0.9,
                 transition: 'opacity 0.2s',
+                whiteSpace: 'nowrap',
               }}
               onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
               onMouseLeave={(e) => e.currentTarget.style.opacity = '0.9'}
