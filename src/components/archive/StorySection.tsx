@@ -24,6 +24,8 @@ export default function StorySection({ background, content, media, summary }: St
       position: 'relative',
       scrollSnapAlign: 'start',
       overflow: 'hidden',
+      display: 'flex',
+      alignItems: 'center',
     }}>
       {/* 배경 이미지 */}
       <div style={{
@@ -52,10 +54,12 @@ export default function StorySection({ background, content, media, summary }: St
         position: 'relative',
         zIndex: 1,
         width: 'min(900px, 75%)',
-        height: '100%',
+        height: '90%',
         margin: '0 auto',
         display: 'flex',
         flexDirection: 'column',
+        justifyContent: 'center',
+        gap: '2vh',
         color: 'white',
       }}>
         {/* 설명 섹션 */}
@@ -63,7 +67,6 @@ export default function StorySection({ background, content, media, summary }: St
           className="story-content-scroll"
           style={{
             height: mediaItem?.type === 'text' ? '40%' : '10%',
-            marginTop: '10%',
             padding: 'clamp(1rem, 3vw, 2rem)',
             overflowY: 'auto',
           }}
@@ -160,14 +163,14 @@ export default function StorySection({ background, content, media, summary }: St
         {/* 요약 섹션 */}
         <div style={{
           height: '30%',
-          backgroundColor: 'rgba(255, 255, 255, 0.1)',
-          padding: 'clamp(1rem, 3vw, 2rem)',
-          borderRadius: '0.5rem',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
         }}>
           <div style={{
+            backgroundColor: 'rgba(255, 255, 255, 0.1)',
+            padding: 'clamp(1rem, 3vw, 2rem)',
+            borderRadius: '0.5rem',
             fontSize: '1.7rem',
             fontFamily: "'East Sea Dokdo', cursive",
             textAlign: 'center',
