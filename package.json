@@ -4,10 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "clean": "rm -rf node_modules .next package-lock.json",
-    "build": "npm run clean && npm install && next build",
+    "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "clean": "rm -rf node_modules .next package-lock.json"
   },
   "dependencies": {
     "@gsap/react": "^2.1.1",
