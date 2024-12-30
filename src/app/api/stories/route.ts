@@ -90,20 +90,19 @@ const getStoriesFromSheet = async () => {
         };
 
         const [
-          rawBackground = '',   // A열: 배경 이미지
-          content = '',         // B열: 내용
-          mediaType = '',       // C열: 미디어 타입
-          rawMediaUrl = '',     // D열: 미디어 URL
-          mediaCaption = '',    // E열: 미디어 설명
-          summary = ''          // F열: 요약
+          _unused = '',        // A열: 무시
+          imageUrl = '',       // B열: 이미지 URL (background로 사용)
+          mediaType = '',      // C열: 미디어 타입
+          rawMediaUrl = '',    // D열: 미디어 URL
+          mediaCaption = '',   // E열: 미디어 설명
+          summary = ''         // F열: 요약
         ] = row;
         
-        const background = cleanUrl(rawBackground);
+        const background = cleanUrl(imageUrl);
         const mediaUrl = cleanUrl(rawMediaUrl);
 
         console.log(`Row ${index} fields:`, {
           background,
-          content,
           mediaType,
           mediaUrl,
           mediaCaption,
@@ -122,9 +121,9 @@ const getStoriesFromSheet = async () => {
         }
 
         const story: Story = {
-          background,           // 배경 이미지 URL
-          content: content || '', // 내용
-          media,                // 미디어 배열
+          background,          // B열의 이미지 URL을 배경으로 사용
+          content: '',         // 현재는 본문 내용 없음
+          media,              // 미디어 배열
           summary: summary || '' // 요약
         };
 
