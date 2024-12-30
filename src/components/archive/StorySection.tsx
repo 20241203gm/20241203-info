@@ -120,7 +120,21 @@ export default function StorySection({ background, content, media, summary }: St
                   allowFullScreen
                 />
               )}
-              {item.caption && (
+              {item.type === 'text' && (
+                <a
+                  href={item.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    color: '#60A5FA',
+                    textDecoration: 'underline',
+                    fontSize: '1rem',
+                  }}
+                >
+                  {item.caption || item.url}
+                </a>
+              )}
+              {item.caption && item.type !== 'text' && (
                 <div style={{
                   fontSize: '0.875rem',
                   color: 'rgba(255, 255, 255, 0.8)',
