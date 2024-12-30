@@ -3,9 +3,24 @@ import { Story, Media } from '@/types/story';
 
 export async function getStoriesFromSheet(): Promise<Story[]> {
   try {
+    console.log('Starting getStoriesFromSheet...');
+    
+    // 환경 변수 확인
+    console.log('Checking environment variables...');
+    if (!process.env.GOOGLE_SHEETS_CREDENTIALS) {
+      throw new Error('GOOGLE_SHEETS_CREDENTIALS is not defined');
+    }
+    if (!process.env.SHEET_ID) {
+      throw new Error('SHEET_ID is not defined');
+    }
+
+    console.log('Parsing credentials...');
+    const credentials = JSON.parse(process.env.GOOGLE_SHEETS_CREDENTIALS);
+    console.log('Credentials parsed successfully');
+
     console.log('Initializing Google Auth...');
     const auth = new google.auth.GoogleAuth({
-      credentials: JSON.parse(process.env.GOOGLE_SHEETS_CREDENTIALS!),
+      credentials,
       scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
     });
 
@@ -21,8 +36,12 @@ export async function getStoriesFromSheet(): Promise<Story[]> {
     const rows = response.data.values;
     console.log('Raw data from sheets:', rows);
     
-    if (!rows) return [];
+    if (!rows) {
+      console.log('No data found in sheet');
+      return [];
+    }
 
+    console.log('Processing rows...');
     return rows.map(row => {
       const background = row[0] || 'https://images.unsplash.com/photo-1596796930385-0885a029049b';
       
@@ -47,6 +66,10 @@ export async function getStoriesFromSheet(): Promise<Story[]> {
     });
   } catch (error) {
     console.error('Error in getStoriesFromSheet:', error);
+    if (error instanceof Error) {
+      console.error('Error message:', error.message);
+      console.error('Error stack:', error.stack);
+    }
     throw error;
   }
 } 

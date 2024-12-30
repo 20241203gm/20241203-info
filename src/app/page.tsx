@@ -1,47 +1,105 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import StorySection from '@/components/archive/StorySection';
 import { Story } from '@/types/story';
 
-const testStories: Story[] = [
-  {
-    background: "https://picsum.photos/1920/1080?random=1",
-    content: "첫 번째 이야기입니다.\n여러 줄로 된 내용을 표시할 수 있습니다.",
-    media: [
-      {
-        type: "image",
-        url: "https://picsum.photos/800/600?random=1",
-        caption: "이미지 설명"
-      }
-    ],
-    summary: "첫 번째 요약"
-  },
-  {
-    background: "https://picsum.photos/1920/1080?random=2",
-    content: "두 번째 이야기입니다.\n이것도 여러 줄입니다.",
-    media: [
-      {
-        type: "text",
-        url: "https://example.com",
-        caption: "관련 문서"
-      }
-    ],
-    summary: "두 번째 요약"
-  }
-];
-
 export default function HomePage() {
+  const [stories, setStories] = useState<Story[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function loadStories() {
+      console.log('Client: Starting to load stories');
+      try {
+        setLoading(true);
+        const response = await fetch('/api/stories');
+        console.log('Client: Response status:', response.status);
+        
+        if (!response.ok) {
+          throw new Error(`Failed to fetch stories: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        console.log('Client: Stories loaded:', data);
+        
+        // 데이터 유효성 검사
+        if (!Array.isArray(data)) {
+          throw new Error('Invalid data format: expected an array');
+        }
+        
+        // 각 스토리 객체의 필수 필드 확인
+        const validStories = data.filter((story: any) => {
+          const isValid = story && 
+            typeof story.background === 'string' && 
+            typeof story.content === 'string';
+          
+          if (!isValid) {
+            console.error('Invalid story object:', story);
+          }
+          return isValid;
+        });
+        
+        console.log('Client: Valid stories:', validStories.length);
+        setStories(validStories);
+      } catch (err) {
+        console.error('Client: Error loading stories:', err);
+        setError(err instanceof Error ? err.message : 'Failed to load stories');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadStories();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-xl">로딩 중...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-xl text-red-500">에러: {error}</div>
+      </div>
+    );
+  }
+
+  if (stories.length === 0) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-xl">아직 기록이 없습니다.</div>
+      </div>
+    );
+  }
+
   return (
     <main style={{
       width: '100vw',
       height: '100vh',
-      overflowY: 'scroll',
+      overflowX: 'hidden',
+      overflowY: 'auto',
       scrollSnapType: 'y mandatory',
-      scrollBehavior: 'smooth'
+      scrollBehavior: 'smooth',
+      position: 'relative'
     }}>
-      {testStories.map((story, index) => (
-        <StorySection key={index} {...story} />
-      ))}
+      {stories.map((story, index) => {
+        console.log('Rendering story:', index, story);
+        return (
+          <StorySection 
+            key={index} 
+            background={story.background}
+            content={story.content}
+            media={story.media}
+            summary={story.summary}
+          />
+        );
+      })}
     </main>
   );
 } 
