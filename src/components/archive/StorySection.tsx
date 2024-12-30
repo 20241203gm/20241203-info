@@ -4,40 +4,103 @@ import { Story } from '@/types/story';
 
 export default function StorySection({ background, content, media, summary }: Story) {
   return (
-    <section 
-      className="relative w-screen h-screen overflow-hidden snap-start snap-always"
+    <div 
+      style={{ 
+        width: '100vw', 
+        height: '100vh',
+        position: 'relative',
+        scrollSnapAlign: 'start',
+        scrollSnapStop: 'always',
+        overflow: 'hidden'
+      }}
     >
-      {/* 배경 이미지 */}
-      <div className="absolute inset-0">
+      <div style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        overflow: 'hidden'
+      }}>
         <img 
           src={background}
           alt=""
-          className="absolute inset-0 w-full h-full object-cover"
+          style={{
+            width: '100%',
+            height: '100%',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            objectFit: 'cover'
+          }}
         />
       </div>
       
-      {/* 오버레이 */}
       <div 
-        className="absolute inset-0 bg-black/50"
+        style={{
+          width: '100%',
+          height: '100%',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          zIndex: 1
+        }} 
       />
       
-      {/* 콘텐츠 */}
       <div 
-        className="absolute inset-0 flex items-center justify-center text-white"
+        style={{
+          width: '100%',
+          height: '100%',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: '#ffffff',
+          zIndex: 2
+        }}
       >
-        <div className="max-w-[1200px] p-12 text-center w-full">
-          <div className="max-h-[calc(100vh-8rem)] overflow-y-auto p-8">
-            <div className="mb-12">
-              {/* 본문 */}
-              <div className="text-lg whitespace-pre-wrap leading-relaxed mb-10">
+        <div style={{ maxWidth: '1200px', padding: '3rem', textAlign: 'center', width: '100%' }}>
+          <div style={{ 
+            maxHeight: 'calc(100vh - 8rem)', 
+            overflowY: 'auto',
+            padding: '2rem'
+          }}>
+            <div style={{ marginBottom: '3rem' }}>
+              <div style={{ 
+                fontSize: '1.1rem', 
+                whiteSpace: 'pre-wrap', 
+                lineHeight: '1.8',
+                marginBottom: '2.5rem'
+              }}>
                 {content}
               </div>
-              
-              {/* 요약 */}
               {summary && (
-                <div className="relative inline-block mt-8 px-12 py-4">
-                  <div className="absolute inset-0 bg-white/35 backdrop-blur-sm rounded" />
-                  <div className="relative text-3xl font-['East_Sea_Dokdo'] tracking-wide text-black">
+                <div style={{ 
+                  position: 'relative',
+                  display: 'inline-block',
+                  marginTop: '2rem',
+                  padding: '1rem 3rem'
+                }}>
+                  <div style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                    backgroundColor: 'rgba(255, 255, 255, 0.35)',
+                    backdropFilter: 'blur(2px)',
+                    borderRadius: '4px'
+                  }} />
+                  <div style={{ 
+                    position: 'relative',
+                    fontSize: '1.8rem', 
+                    fontFamily: '"East Sea Dokdo", serif',
+                    letterSpacing: '0.05em',
+                    color: '#000000'
+                  }}>
                     "{summary}"
                   </div>
                 </div>
@@ -46,6 +109,6 @@ export default function StorySection({ background, content, media, summary }: St
           </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 }
