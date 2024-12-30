@@ -59,11 +59,13 @@ export default function StorySection({ background, content, media, summary }: St
         color: 'white',
       }}>
         {/* 내용 섹션 */}
-        <div style={{
-          flex: '1 1 40%',
-          overflowY: 'auto',
-          className: 'story-content-scroll'
-        }}>
+        <div 
+          className="story-content-scroll"
+          style={{
+            flex: '1 1 40%',
+            overflowY: 'auto',
+          }}
+        >
           <pre style={{
             fontSize: '1rem',
             fontWeight: '200',
@@ -78,14 +80,16 @@ export default function StorySection({ background, content, media, summary }: St
 
         {/* 미디어 섹션 */}
         {media && media.length > 0 && (
-          <div style={{
-            flex: '1 1 30%',
-            overflowY: 'auto',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '1rem',
-            className: 'story-content-scroll'
-          }}>
+          <div 
+            className="story-content-scroll"
+            style={{
+              flex: '1 1 30%',
+              overflowY: 'auto',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '1rem',
+            }}
+          >
             {media.map((item, index) => (
               <div key={index} style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                 {item.type === 'video' ? (
