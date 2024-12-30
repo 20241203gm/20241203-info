@@ -17,35 +17,17 @@ export default function HomePage() {
         const response = await fetch('/api/stories');
         console.log('Client: Response status:', response.status);
         
-        if (!response.ok) {
-          throw new Error(`Failed to fetch stories: ${response.status}`);
-        }
-        
         const data = await response.json();
-        console.log('Client: Stories loaded:', data);
+        console.log('Client: Response data:', data);
         
-        // 데이터 유효성 검사
-        if (!Array.isArray(data)) {
-          throw new Error('Invalid data format: expected an array');
+        if (!response.ok) {
+          throw new Error(`Failed to fetch stories: ${response.status}\nDetails: ${JSON.stringify(data, null, 2)}`);
         }
-        
-        // 각 스토리 객체의 필수 필드 확인
-        const validStories = data.filter((story: any) => {
-          const isValid = story && 
-            typeof story.background === 'string' && 
-            typeof story.content === 'string';
-          
-          if (!isValid) {
-            console.error('Invalid story object:', story);
-          }
-          return isValid;
-        });
-        
-        console.log('Client: Valid stories:', validStories.length);
-        setStories(validStories);
-      } catch (err) {
-        console.error('Client: Error loading stories:', err);
-        setError(err instanceof Error ? err.message : 'Failed to load stories');
+
+        setStories(data);
+      } catch (error) {
+        console.error('Client: Error loading stories:', error);
+        setError(error instanceof Error ? error.message : 'Failed to load stories');
       } finally {
         setLoading(false);
       }
