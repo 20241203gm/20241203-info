@@ -57,18 +57,39 @@ export default function Header() {
           target="_self" 
           className={`${styles.navLink} ${pathname === '/timeline' ? styles.active : ''}`}
         >
+          <Image
+            src="/1f4cb.svg"
+            alt="타임라인 아이콘"
+            width={16}
+            height={16}
+            style={{ marginRight: '4px' }}
+          />
           계란타임라인
         </Link>
         <Link 
           href="/wiki" 
           className={`${styles.navLink} ${pathname === '/wiki' ? styles.active : ''}`}
         >
+          <Image
+            src="/1f310.svg"
+            alt="위키 아이콘"
+            width={16}
+            height={16}
+            style={{ marginRight: '4px' }}
+          />
           계란위키
         </Link>
         <Link 
           href="/" 
           className={`${styles.navLink} ${pathname === '/' ? styles.active : ''}`}
         >
+          <Image
+            src="/1f4e2.svg"
+            alt="광장의 목소리 아이콘"
+            width={16}
+            height={16}
+            style={{ marginRight: '4px' }}
+          />
           광장의 목소리
         </Link>
       </nav>
