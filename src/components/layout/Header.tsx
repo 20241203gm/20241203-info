@@ -27,21 +27,20 @@ export default function Header() {
         gap: '20px',
         flex: 1,
       }}>
-        <Link href="/" style={{
+        <a href="https://20241203.info" target="_blank" rel="noopener noreferrer" style={{
           color: 'white',
           textDecoration: 'none',
           fontSize: '1.1rem',
-          fontWeight: pathname === '/' ? 'bold' : 'normal',
         }}>
           20241203.info
-        </Link>
-        <Link href="/archive" style={{
+        </a>
+        <Link href="/" style={{
           color: 'rgba(255, 255, 255, 0.8)',
           textDecoration: 'none',
           fontSize: '0.9rem',
-          fontWeight: pathname === '/archive' ? 'bold' : 'normal',
+          fontWeight: pathname === '/' ? 'bold' : 'normal',
         }}>
-          아카이브
+          광장의 목소리
         </Link>
         <Link href="/timeline" style={{
           color: 'rgba(255, 255, 255, 0.8)',
@@ -49,7 +48,7 @@ export default function Header() {
           fontSize: '0.9rem',
           fontWeight: pathname === '/timeline' ? 'bold' : 'normal',
         }}>
-          타임라인
+          계란타임라인
         </Link>
         <Link href="/wiki" style={{
           color: 'rgba(255, 255, 255, 0.8)',
@@ -57,7 +56,7 @@ export default function Header() {
           fontSize: '0.9rem',
           fontWeight: pathname === '/wiki' ? 'bold' : 'normal',
         }}>
-          위키
+          계란위키
         </Link>
       </nav>
     </header>
