@@ -181,7 +181,7 @@ export default function StorySection({ background, title, content, media, summar
           <div style={{
             width: '70%',
             maxWidth: '800px',
-            height: '60%',
+            height: '80%',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
