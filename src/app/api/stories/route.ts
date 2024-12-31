@@ -50,8 +50,15 @@ const getYoutubeEmbedUrl = (url: string) => {
     }
 
     if (!videoId) return url;
+
+    // 기본 임베드 URL 생성
+    let embedUrl = `https://www.youtube.com/embed/${videoId}`;
     
-    const embedUrl = `https://www.youtube.com/embed/${videoId}${timestamp ? `?start=${timestamp}` : ''}`;
+    // 타임스탬프가 있는 경우 t 파라미터로 추가
+    if (timestamp) {
+      embedUrl += `?t=${timestamp}`;
+    }
+
     console.log('Generated embed URL:', embedUrl);
     return embedUrl;
 

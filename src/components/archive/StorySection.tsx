@@ -18,20 +18,23 @@ export default function StorySection({ background, title, content, media, summar
   useEffect(() => {
     if (!videoRef.current || mediaItem?.type !== 'video') return;
 
+    console.log('Video URL:', mediaItem.url);
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
+          const iframe = entry.target as HTMLIFrameElement;
+          console.log('Intersection state:', entry.isIntersecting);
           if (!entry.isIntersecting) {
-            // 화면에서 벗어났을 때는 iframe을 숨김
-            videoRef.current!.style.visibility = 'hidden';
+            iframe.style.opacity = '0';
           } else {
-            // 화면에 들어왔을 때는 iframe을 보여줌
-            videoRef.current!.style.visibility = 'visible';
+            iframe.style.opacity = '1';
           }
         });
       },
       {
         threshold: 0.5,
+        rootMargin: '0px'
       }
     );
 
@@ -156,7 +159,8 @@ export default function StorySection({ background, title, content, media, summar
                   width: '100%',
                   height: '100%',
                   border: 'none',
-                  visibility: 'visible'
+                  opacity: 1,
+                  transition: 'opacity 0.3s ease'
                 }}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
