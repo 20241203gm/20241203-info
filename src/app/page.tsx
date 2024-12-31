@@ -15,7 +15,8 @@ export default function HomePage() {
       try {
         setLoading(true);
         const response = await fetch('/api/stories', {
-          cache: 'no-store'
+          cache: 'no-store',
+          next: { revalidate: 0 }
         });
         console.log('Client: Response status:', response.status);
         

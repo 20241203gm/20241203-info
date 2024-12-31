@@ -128,12 +128,13 @@ export default function StorySection({ background, title, content, media, summar
         }}>
           {content}
         </pre>
-        
+
         {/* 미디어 표시 */}
         {mediaItem?.type === 'video' ? (
           <div style={{
-            width: '80%',
-            maxWidth: '1280px',
+            width: '100%',
+            maxWidth: '800px',
+            height: '65%',
             margin: '0 auto',
             display: 'flex',
             alignItems: 'center',
@@ -144,44 +145,54 @@ export default function StorySection({ background, title, content, media, summar
           }}>
             <div style={{
               position: 'relative',
-              width: '100%',
-              height: '0',
-              paddingBottom: '56.25%',
+              width: '80%',
+              height: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
             }}>
-              <iframe
-                ref={videoRef}
-                src={mediaItem.url}
-                title="YouTube video player"
-                frameBorder="0"
-                style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  width: '100%',
-                  height: '100%',
-                  border: 'none',
-                  opacity: 1,
-                  transition: 'opacity 0.3s ease'
-                }}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
+              <div style={{
+                position: 'relative',
+                width: '100%',
+                paddingTop: 'calc(100% * 0.5625)',
+              }}>
+                <iframe
+                  ref={videoRef}
+                  src={mediaItem.url}
+                  title="YouTube video player"
+                  frameBorder="0"
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                    border: 'none',
+                    opacity: 1,
+                    transition: 'opacity 0.3s ease'
+                  }}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
             </div>
           </div>
         ) : mediaItem?.type === 'image' ? (
           <div style={{
-            width: '80%',
-            height: '65%',
+            width: '70%',
+            maxWidth: '800px',
+            height: '60%',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
+            margin: '0 auto',
           }}>
             <img
               src={mediaItem.url}
               alt={mediaItem.caption}
               style={{
-                width: '100%',
-                height: '100%',
+                maxWidth: '100%',
+                maxHeight: '100%',
                 objectFit: 'contain',
               }}
             />
