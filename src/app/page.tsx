@@ -52,13 +52,6 @@ export default function HomePage() {
 
   useEffect(() => {
     loadStories();
-
-    // 5초마다 데이터 새로 불러오기
-    const interval = setInterval(() => {
-      loadStories();
-    }, 5000);
-    
-    return () => clearInterval(interval);
   }, []);
 
   if (loading) {
