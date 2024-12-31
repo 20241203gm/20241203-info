@@ -9,45 +9,48 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    async function loadStories() {
-      console.log('Client: Starting to load stories');
-      try {
-        setLoading(true);
-        const response = await fetch('/api/stories', {
-          cache: 'no-store',
-          next: { revalidate: 0 }
-        });
-        console.log('Client: Response status:', response.status);
-        
-        const data = await response.json();
-        console.log('Client: Response data:', JSON.stringify(data, null, 2));
-        
-        if (!response.ok) {
-          throw new Error(`Failed to fetch stories: ${response.status}\nDetails: ${JSON.stringify(data, null, 2)}`);
+  async function loadStories() {
+    console.log('Client: Starting to load stories');
+    try {
+      setLoading(true);
+      const response = await fetch('/api/stories?' + new Date().getTime(), {
+        cache: 'no-store',
+        headers: {
+          'Pragma': 'no-cache',
+          'Cache-Control': 'no-cache'
         }
-
-        if (!Array.isArray(data)) {
-          console.error('Invalid data format:', data);
-          throw new Error('Invalid data format: expected an array');
-        }
-
-        data.forEach((story, index) => {
-          console.log(`Story ${index}:`, JSON.stringify(story, null, 2));
-          if (!story.background || !story.content) {
-            console.error(`Invalid story at index ${index}:`, story);
-          }
-        });
-
-        setStories(data);
-      } catch (error) {
-        console.error('Client: Error loading stories:', error);
-        setError(error instanceof Error ? error.message : 'Failed to load stories');
-      } finally {
-        setLoading(false);
+      });
+      console.log('Client: Response status:', response.status);
+      
+      const data = await response.json();
+      console.log('Client: Response data:', JSON.stringify(data, null, 2));
+      
+      if (!response.ok) {
+        throw new Error(`Failed to fetch stories: ${response.status}\nDetails: ${JSON.stringify(data, null, 2)}`);
       }
-    }
 
+      if (!Array.isArray(data)) {
+        console.error('Invalid data format:', data);
+        throw new Error('Invalid data format: expected an array');
+      }
+
+      data.forEach((story, index) => {
+        console.log(`Story ${index}:`, JSON.stringify(story, null, 2));
+        if (!story.background || !story.content) {
+          console.error(`Invalid story at index ${index}:`, story);
+        }
+      });
+
+      setStories(data);
+    } catch (error) {
+      console.error('Client: Error loading stories:', error);
+      setError(error instanceof Error ? error.message : 'Failed to load stories');
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
     loadStories();
   }, []);
 
@@ -101,6 +104,13 @@ export default function HomePage() {
           />
         );
       })}
+      <StorySection
+        background="https://flexible.img.hani.co.kr/flexible/normal/970/1346/imgdb/original/2022/0929/4516644131171539.jpg"
+        title=""
+        content=""
+        summary=""
+        last="더 많은 광장의 목소리를 들려주세요"
+      />
     </main>
   );
 } 

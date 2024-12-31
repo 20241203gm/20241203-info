@@ -9,9 +9,10 @@ interface StorySectionProps {
   content: string;
   media?: Media[];
   summary?: string;
+  last?: string;
 }
 
-export default function StorySection({ background, title, content, media, summary }: StorySectionProps) {
+export default function StorySection({ background, title, content, media, summary, last }: StorySectionProps) {
   const mediaItem = media && media[0];
   const videoRef = useRef<HTMLIFrameElement>(null);
 
@@ -125,6 +126,10 @@ export default function StorySection({ background, title, content, media, summar
           lineHeight: '1.6',
           margin: 0,
           overflowY: 'auto',
+          textAlign: 'left',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'flex-start',
         }}>
           {content}
         </pre>
@@ -243,33 +248,84 @@ export default function StorySection({ background, title, content, media, summar
       )}
 
       {/* 요약 (미디어 설명 아래) */}
-      <div style={{
-        position: 'absolute',
-        top: 'calc(70% + 2rem)',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        width: '80%',
-        zIndex: 1,
-        color: 'white',
-        textAlign: 'center',
-      }}>
+      {summary && (
         <div style={{
-          backgroundColor: 'rgba(255, 255, 255, 0.1)',
-          padding: '1rem',
-          borderRadius: '0.5rem',
+          position: 'absolute',
+          top: 'calc(70% + 2rem)',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          width: '80%',
+          zIndex: 1,
+          color: 'white',
+          textAlign: 'center',
         }}>
           <div style={{
-            fontSize: 'clamp(1.4rem, 4vw, 1.7rem)',
-            fontFamily: "'East Sea Dokdo', cursive",
-            whiteSpace: 'pre-wrap',
-            wordBreak: 'keep-all',
-            lineHeight: '1.3',
-            textAlign: 'center',
+            backgroundColor: 'rgba(255, 255, 255, 0.1)',
+            padding: '1rem',
+            borderRadius: '0.5rem',
           }}>
-            "{summary}"
+            <div style={{
+              fontSize: 'clamp(1.4rem, 4vw, 1.7rem)',
+              fontFamily: "'East Sea Dokdo', cursive",
+              whiteSpace: 'pre-wrap',
+              wordBreak: 'keep-all',
+              lineHeight: '1.3',
+              textAlign: 'center',
+            }}>
+              "{summary}"
+            </div>
           </div>
         </div>
-      </div>
+      )}
+
+      {/* 마지막 페이지 텍스트 */}
+      {last && (
+        <div style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: '80%',
+          zIndex: 1,
+          color: 'white',
+          textAlign: 'center',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '2rem',
+        }}>
+          <div style={{
+            fontSize: 'clamp(1.5rem, 4vw, 2.5rem)',
+            fontFamily: "'Noto Sans KR', sans-serif",
+            fontWeight: '700',
+            whiteSpace: 'pre-wrap',
+            wordBreak: 'keep-all',
+            lineHeight: '1.5',
+          }}>
+            {last}
+          </div>
+          <a
+            href="https://docs.google.com/forms/d/e/1FAIpQLScipB0kw0MEM9UuYc2dULjySMbVFXQF7UEIGGV-xfjJLKsOEA/viewform?usp=dialog"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              padding: '1rem 2rem',
+              backgroundColor: 'white',
+              color: 'black',
+              textDecoration: 'none',
+              borderRadius: '8px',
+              fontSize: 'clamp(1rem, 2vw, 1.2rem)',
+              fontFamily: "'Noto Sans KR', sans-serif",
+              fontWeight: '500',
+              transition: 'opacity 0.2s ease',
+            }}
+            onMouseOver={(e) => e.currentTarget.style.opacity = '0.8'}
+            onMouseOut={(e) => e.currentTarget.style.opacity = '1'}
+          >
+            구글 폼으로 이동
+          </a>
+        </div>
+      )}
     </section>
   );
 }

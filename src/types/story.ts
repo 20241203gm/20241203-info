@@ -10,4 +10,13 @@ export interface Story {
   content: string;
   media?: Media[];
   summary?: string;
+}
+
+export interface StorySectionProps {
+  background: string;
+  title: string;
+  content: string;
+  media?: Media[];
+  summary?: string;
+  last?: string;
 } 

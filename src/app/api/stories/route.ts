@@ -237,9 +237,10 @@ export async function GET() {
     console.log('API: Stories fetched successfully:', JSON.stringify(stories, null, 2));
     return NextResponse.json(stories, {
       headers: {
-        'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+        'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0',
         'Pragma': 'no-cache',
-        'Expires': '0'
+        'Expires': '0',
+        'Surrogate-Control': 'no-store'
       }
     });
   } catch (error: any) {
