@@ -6,7 +6,8 @@ export interface Media {
 
 export interface Story {
   background: string;
+  title: string;
   content: string;
   media?: Media[];
-  summary: string;
+  summary?: string;
 } 

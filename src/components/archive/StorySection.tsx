@@ -2,21 +2,45 @@
 
 import React, { useEffect, useRef } from 'react';
 import { Story, Media } from '@/types/story';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
 
 interface StorySectionProps {
   background: string;
+  title: string;
   content: string;
   media?: Media[];
   summary: string;
 }
 
-export default function StorySection({ background, content, media, summary }: StorySectionProps) {
+export default function StorySection({ background, title, content, media, summary }: StorySectionProps) {
   const mediaItem = media && media[0];
-  const contentHeight = mediaItem?.type === 'text' ? '40%' : '10%';
+  const videoRef = useRef<HTMLIFrameElement>(null);
+
+  useEffect(() => {
+    if (!videoRef.current || mediaItem?.type !== 'video') return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) {
+            // 화면에서 벗어났을 때는 iframe을 숨김
+            videoRef.current!.style.visibility = 'hidden';
+          } else {
+            // 화면에 들어왔을 때는 iframe을 보여줌
+            videoRef.current!.style.visibility = 'visible';
+          }
+        });
+      },
+      {
+        threshold: 0.5,
+      }
+    );
+
+    observer.observe(videoRef.current);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [mediaItem]);
 
   return (
     <section style={{
@@ -25,9 +49,6 @@ export default function StorySection({ background, content, media, summary }: St
       position: 'relative',
       scrollSnapAlign: 'start',
       overflow: 'hidden',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
     }}>
       {/* 배경 이미지 */}
       <div style={{
@@ -51,156 +72,185 @@ export default function StorySection({ background, content, media, summary }: St
         }} />
       </div>
 
-      {/* 콘텐츠 컨테이너 */}
+      {/* 제목 (상위 10%) */}
       <div style={{
-        width: 'min(900px, 90%)',
-        height: '90vh',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '2vh',
-        color: 'white',
+        position: 'absolute',
+        top: '10%',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        width: '80%',
         zIndex: 1,
-        position: 'relative',
+        color: 'white',
+        textAlign: 'center',
       }}>
-        {/* 설명 섹션 */}
-        <div 
-          className="story-content-scroll"
-          style={{
-            flex: mediaItem?.type === 'text' ? '2' : '1',
-            padding: 'clamp(1rem, 3vw, 2rem)',
-            overflowY: 'auto',
-            backgroundColor: 'rgba(0, 0, 0, 0.3)',
-            borderRadius: '0.5rem',
-          }}
-        >
-          <pre style={{
-            fontSize: 'clamp(0.9rem, 2.5vw, 1rem)',
-            fontWeight: '200',
-            fontFamily: "'Noto Sans KR', sans-serif",
-            whiteSpace: 'pre-wrap',
-            wordBreak: 'keep-all',
-            lineHeight: '1.6',
-            margin: 0,
-          }}>
-            {content}
-          </pre>
-        </div>
+        <h1 style={{
+          fontSize: 'clamp(1.2rem, 3vw, 1.8rem)',
+          fontFamily: "'Noto Sans KR', sans-serif",
+          fontWeight: '700',
+          lineHeight: '1.4',
+          wordBreak: 'keep-all',
+        }}>
+          {title}
+        </h1>
+      </div>
 
-        {/* 미디어 섹션 */}
-        {mediaItem && mediaItem.type !== 'text' && (
-          <div 
-            style={{
-              flex: '2',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: 'clamp(0.5rem, 2vw, 1rem)',
-              backgroundColor: 'rgba(0, 0, 0, 0.3)',
-              borderRadius: '0.5rem',
-            }}
-          >
-            {mediaItem.type === 'video' ? (
+      {/* 콘텐츠/미디어 영역 (20-69%) */}
+      <div style={{
+        position: 'absolute',
+        top: '20%',
+        height: '49%',
+        width: '100%',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        zIndex: 1,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'column',
+        gap: '1rem',
+      }}>
+        {/* 내용 표시 */}
+        <pre style={{
+          width: '80%',
+          height: mediaItem?.type === 'text' ? '100%' : '30%',
+          padding: mediaItem?.type === 'text' ? '2rem' : '1rem',
+          color: 'white',
+          fontSize: 'clamp(0.9rem, 2.5vw, 1rem)',
+          fontWeight: '200',
+          fontFamily: "'Noto Sans KR', sans-serif",
+          whiteSpace: 'pre-wrap',
+          wordBreak: 'keep-all',
+          lineHeight: '1.6',
+          margin: 0,
+          overflowY: 'auto',
+        }}>
+          {content}
+        </pre>
+        
+        {/* 미디어 표시 */}
+        {mediaItem?.type === 'video' ? (
+          <div style={{
+            width: '80%',
+            height: '65%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: '#000',
+            borderRadius: '8px',
+            overflow: 'hidden',
+          }}>
+            <div style={{
+              position: 'relative',
+              width: '100%',
+              height: '0',
+              paddingBottom: '56.25%',
+            }}>
               <iframe
+                ref={videoRef}
                 src={mediaItem.url}
+                title="YouTube video player"
+                frameBorder="0"
                 style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
                   width: '100%',
                   height: '100%',
                   border: 'none',
-                  borderRadius: '0.25rem',
+                  visibility: 'visible'
                 }}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
               />
-            ) : (
-              <img
-                src={mediaItem.url}
-                alt={mediaItem.caption}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'contain',
-                  borderRadius: '0.25rem',
-                }}
-              />
-            )}
+            </div>
           </div>
-        )}
-
-        {/* 미디어 설명 */}
-        {mediaItem && (
+        ) : mediaItem?.type === 'image' ? (
           <div style={{
-            flex: '0.5',
+            width: '80%',
+            height: '65%',
             display: 'flex',
             alignItems: 'center',
-            padding: '0.5rem clamp(1rem, 3vw, 2rem)',
-            backgroundColor: 'rgba(0, 0, 0, 0.3)',
-            borderRadius: '0.5rem',
-            flexWrap: 'wrap',
-            gap: '0.5rem',
+            justifyContent: 'center',
           }}>
-            <p style={{
-              fontSize: 'clamp(0.8rem, 2vw, 0.9rem)',
-              fontFamily: "'Noto Sans KR', sans-serif",
-              fontWeight: '200',
-              flex: 1,
-              margin: 0,
-              minWidth: '200px',
-            }}>
-              {mediaItem.caption}
-            </p>
-            <a
-              href={mediaItem.url}
-              target="_blank"
-              rel="noopener noreferrer"
+            <img
+              src={mediaItem.url}
+              alt={mediaItem.caption}
               style={{
-                padding: '0.25rem 0.75rem',
-                backgroundColor: 'white',
-                color: 'black',
-                textDecoration: 'none',
-                borderRadius: '4px',
-                fontSize: 'clamp(0.8rem, 2vw, 0.9rem)',
-                fontFamily: "'Noto Sans KR', sans-serif",
-                fontWeight: '400',
-                opacity: 0.9,
-                transition: 'opacity 0.2s',
-                whiteSpace: 'nowrap',
+                width: '100%',
+                height: '100%',
+                objectFit: 'contain',
               }}
-              onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
-              onMouseLeave={(e) => e.currentTarget.style.opacity = '0.9'}
-            >
-              원본보기
-            </a>
+            />
           </div>
-        )}
+        ) : null}
+      </div>
 
-        {/* 요약 섹션 */}
+      {/* 미디어 설명 및 링크 (70%) */}
+      {mediaItem && (
         <div style={{
-          flex: '1',
+          position: 'absolute',
+          top: '70%',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          width: '80%',
+          zIndex: 1,
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'center',
-          backgroundColor: 'rgba(255, 255, 255, 0.1)',
-          borderRadius: '0.5rem',
-          padding: 'clamp(0.5rem, 2vw, 1rem)',
+          gap: '1rem',
+          color: 'white',
         }}>
-          <div 
-            className="story-content-scroll"
+          <span style={{
+            fontSize: '0.9rem',
+            fontFamily: "'Noto Sans KR', sans-serif",
+            fontWeight: '200',
+          }}>
+            {mediaItem.caption}
+          </span>
+          <a
+            href={mediaItem.type === 'video' ? mediaItem.url.replace('embed/', 'watch?v=') : mediaItem.url}
+            target="_blank"
+            rel="noopener noreferrer"
             style={{
-              maxHeight: '100%',
-              overflowY: 'auto',
-              padding: 'clamp(0.5rem, 2vw, 1rem)',
+              padding: '0.25rem 0.75rem',
+              backgroundColor: 'white',
+              color: 'black',
+              textDecoration: 'none',
+              borderRadius: '4px',
+              fontSize: '0.9rem',
+              fontFamily: "'Noto Sans KR', sans-serif",
+              fontWeight: '400',
+              whiteSpace: 'nowrap',
             }}
           >
-            <div style={{
-              fontSize: 'clamp(1.4rem, 4vw, 1.7rem)',
-              fontFamily: "'East Sea Dokdo', cursive",
-              textAlign: 'center',
-              whiteSpace: 'pre-wrap',
-              wordBreak: 'keep-all',
-              lineHeight: '1.3',
-            }}>
-              "{summary}"
-            </div>
+            원본보기
+          </a>
+        </div>
+      )}
+
+      {/* 요약 (미디어 설명 아래) */}
+      <div style={{
+        position: 'absolute',
+        top: 'calc(70% + 2rem)',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        width: '80%',
+        zIndex: 1,
+        color: 'white',
+        textAlign: 'center',
+      }}>
+        <div style={{
+          backgroundColor: 'rgba(255, 255, 255, 0.1)',
+          padding: '1rem',
+          borderRadius: '0.5rem',
+        }}>
+          <div style={{
+            fontSize: 'clamp(1.4rem, 4vw, 1.7rem)',
+            fontFamily: "'East Sea Dokdo', cursive",
+            whiteSpace: 'pre-wrap',
+            wordBreak: 'keep-all',
+            lineHeight: '1.3',
+            textAlign: 'center',
+          }}>
+            "{summary}"
           </div>
         </div>
       </div>

@@ -40,13 +40,14 @@ export async function getStoriesFromSheet(): Promise<Story[]> {
       console.log('No data found in sheet');
       return [];
     }
-
     console.log('Processing rows...');
     return rows.map(row => {
-      const background = row[0] || 'https://images.unsplash.com/photo-1596796930385-0885a029049b';
+      const title = row[0] || '';
+      const background = row[1] || 'https://images.unsplash.com/photo-1596796930385-0885a029049b';
+      const content = row[2] || '';
       
       const media: Media[] = [];
-      if (row[2] && row[3]) {
+      if (row[3] && row[4]) {
         media.push({
           type: row[2] as Media['type'],
           url: row[3],

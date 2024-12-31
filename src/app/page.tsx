@@ -90,9 +90,10 @@ export default function HomePage() {
           <StorySection 
             key={index} 
             background={story.background}
-            content={story.content}
-            media={story.media}
-            summary={story.summary}
+            title={story.title}
+            content={story.content || ''}
+            media={story.media || ''}
+            summary={story.summary || ''}
           />
         );
       })}

@@ -7,6 +7,60 @@ const SCOPES = [
   'https://www.googleapis.com/auth/drive.file',
 ];
 
+const cleanUrl = (url: string) => {
+  if (!url) return '';
+  return url.trim().startsWith('@') ? url.trim().substring(1) : url.trim();
+};
+
+const getYoutubeEmbedUrl = (url: string) => {
+  if (!url) return '';
+  
+  // 이미 임베드 URL인 경우 그대로 반환
+  if (url.includes('youtube.com/embed/')) {
+    return url;
+  }
+
+  try {
+    let videoId = '';
+    let timestamp = '';
+
+    // 라이브 스트림
+    if (url.includes('youtube.com/live/')) {
+      videoId = url.split('live/')[1].split('?')[0];
+      const tMatch = url.match(/[?&]t=(\d+)s?/);
+      if (tMatch) {
+        timestamp = tMatch[1];
+      }
+    }
+    // 일반 URL
+    else if (url.includes('watch?v=')) {
+      videoId = url.split('watch?v=')[1].split('?')[0];
+      const tMatch = url.match(/[?&]t=(\d+)s?/);
+      if (tMatch) {
+        timestamp = tMatch[1];
+      }
+    }
+    // 단축 URL
+    else if (url.includes('youtu.be/')) {
+      videoId = url.split('youtu.be/')[1].split('?')[0];
+      const tMatch = url.match(/[?&]t=(\d+)s?/);
+      if (tMatch) {
+        timestamp = tMatch[1];
+      }
+    }
+
+    if (!videoId) return url;
+    
+    const embedUrl = `https://www.youtube.com/embed/${videoId}${timestamp ? `?start=${timestamp}` : ''}`;
+    console.log('Generated embed URL:', embedUrl);
+    return embedUrl;
+
+  } catch (e) {
+    console.error('Error processing YouTube URL:', e);
+    return url;
+  }
+};
+
 const getStoriesFromSheet = async () => {
   console.log('Starting getStoriesFromSheet...');
   try {
@@ -61,8 +115,8 @@ const getStoriesFromSheet = async () => {
       console.log('First sheet title:', sheetTitle);
 
       const response = await sheets.spreadsheets.values.get({
-        spreadsheetId: sheetId,
-        range: `${sheetTitle}!A2:G`,
+        spreadsheetId: process.env.SHEET_ID,
+        range: 'Stories!A2:H',
       });
       
       console.log('API Response:', JSON.stringify(response.data, null, 2));
@@ -84,39 +138,15 @@ const getStoriesFromSheet = async () => {
           return null;
         }
 
-        const cleanUrl = (url: string) => {
-          if (!url) return '';
-          return url.startsWith('@') ? url.substring(1) : url;
-        };
-
-        const getYoutubeEmbedUrl = (url: string) => {
-          if (!url) return '';
-          
-          // 라이브 스트림 URL 처리
-          if (url.includes('live/')) {
-            const videoId = url.split('live/')[1].split('?')[0];
-            return `https://www.youtube.com/embed/${videoId}`;
-          }
-          
-          // 일반적인 YouTube URL 처리
-          const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-          const match = url.match(regExp);
-          
-          if (match && match[2].length === 11) {
-            return `https://www.youtube.com/embed/${match[2]}`;
-          }
-          
-          return url;
-        };
-
         const [
           _unused = '',        // A열: 무시
           imageUrl = '',       // B열: 이미지 URL (background로 사용)
-          content = '',        // C열: 메인 컨텐츠 내용
-          mediaType = '',      // D열: 미디어 타입
-          mediaUrl = '',       // E열: 미디어 URL
-          mediaCaption = '',   // F열: 미디어 설명
-          summary = ''         // G열: 컨텐츠 요약
+          title = '',          // C열: 제목
+          content = '',        // D열: 메인 컨텐츠 내용
+          mediaType = '',      // E열: 미디어 타입
+          mediaUrl = '',       // F열: 미디어 URL
+          mediaCaption = '',   // G열: 미디어 설명
+          summary = ''         // H열: 컨텐츠 요약
         ] = row;
         
         const background = cleanUrl(imageUrl);
@@ -124,6 +154,7 @@ const getStoriesFromSheet = async () => {
 
         console.log(`Row ${index} fields:`, {
           background,
+          title,
           content,
           mediaType,
           mediaUrl: cleanMediaUrl,
@@ -144,9 +175,10 @@ const getStoriesFromSheet = async () => {
 
         const story: Story = {
           background,          // B열의 이미지 URL을 배경으로 사용
-          content,            // C열의 메인 컨텐츠 내용
+          title: title || '',  // C열의 제목, 없으면 빈 문자열
+          content,            // D열의 메인 컨텐츠 내용
           media,              // 미디어 정보
-          summary: summary || '' // G열의 컨텐츠 요약
+          summary: summary || '' // H열의 컨텐츠 요약
         };
 
         console.log(`Processed story ${index}:`, JSON.stringify(story, null, 2));
@@ -157,6 +189,7 @@ const getStoriesFromSheet = async () => {
         }
         const isValid = 
           typeof story.background === 'string' &&
+          typeof story.title === 'string' &&
           typeof story.content === 'string' &&
           Array.isArray(story.media) &&
           typeof story.summary === 'string';
