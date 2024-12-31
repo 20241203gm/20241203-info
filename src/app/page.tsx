@@ -92,7 +92,7 @@ export default function HomePage() {
             background={story.background}
             title={story.title}
             content={story.content || ''}
-            media={story.media || ''}
+            media={story.media}
             summary={story.summary || ''}
           />
         );
