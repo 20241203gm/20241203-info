@@ -1,5 +1,6 @@
 import './globals.css'
 import type { Metadata } from 'next'
+import Header from '@/components/layout/Header'
 
 export const metadata: Metadata = {
   title: '20241203.info',
@@ -19,6 +20,7 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=East+Sea+Dokdo&family=Nanum+Pen+Script&family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet" />
       </head>
       <body className="antialiased">
+        <Header />
         {children}
       </body>
     </html>
