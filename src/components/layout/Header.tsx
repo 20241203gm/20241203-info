@@ -53,7 +53,8 @@ export default function Header() {
 
       <nav className={styles.nav}>
         <Link 
-          href="/timeline" 
+          href="https://www.20241203.info/16c7c57db3658034a423df6dfe3be8f3"
+          target="_self" 
           className={`${styles.navLink} ${pathname === '/timeline' ? styles.active : ''}`}
         >
           계란타임라인
