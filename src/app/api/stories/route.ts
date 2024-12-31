@@ -235,7 +235,13 @@ export async function GET() {
     console.log('API: Fetching stories...');
     const stories = await getStoriesFromSheet();
     console.log('API: Stories fetched successfully:', JSON.stringify(stories, null, 2));
-    return NextResponse.json(stories);
+    return NextResponse.json(stories, {
+      headers: {
+        'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0'
+      }
+    });
   } catch (error: any) {
     console.error('API: Failed to fetch stories:', error);
     console.error('API: Error message:', error.message);
