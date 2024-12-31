@@ -1,0 +1,12 @@
+.navLink {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-family: 'Noto Sans KR', sans-serif;
+  letter-spacing: -0.02em;
+  transition: color 0.2s ease;
+}
+
+.navLink:hover {
+  color: white;
+} 

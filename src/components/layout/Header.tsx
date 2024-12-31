@@ -1,7 +1,13 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
+import styles from './Header.module.css';
+
+const linkStyle = (isActive: boolean) => ({
+  fontWeight: isActive ? '600' : '400',
+});
 
 export default function Header() {
   const pathname = usePathname();
@@ -21,42 +27,58 @@ export default function Header() {
       padding: '0 20px',
       borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
     }}>
-      <nav style={{
+      <div style={{
         display: 'flex',
         alignItems: 'center',
-        gap: '20px',
-        flex: 1,
+        gap: '8px',
       }}>
-        <a href="https://20241203.info" target="_blank" rel="noopener noreferrer" style={{
+        <Image
+          src="/icon.png"
+          alt="20241203.info 로고"
+          width={24}
+          height={24}
+          style={{
+            borderRadius: '4px',
+          }}
+        />
+        <a href="https://www.20241203.info/" target="_blank" rel="noopener noreferrer" style={{
           color: 'white',
           textDecoration: 'none',
           fontSize: '1.1rem',
+          fontFamily: "'Noto Sans KR', sans-serif",
+          fontWeight: '500',
+          letterSpacing: '-0.02em',
         }}>
           20241203.info
         </a>
-        <Link href="/" style={{
-          color: 'rgba(255, 255, 255, 0.8)',
-          textDecoration: 'none',
-          fontSize: '0.9rem',
-          fontWeight: pathname === '/' ? 'bold' : 'normal',
-        }}>
-          광장의 목소리
-        </Link>
-        <Link href="/timeline" style={{
-          color: 'rgba(255, 255, 255, 0.8)',
-          textDecoration: 'none',
-          fontSize: '0.9rem',
-          fontWeight: pathname === '/timeline' ? 'bold' : 'normal',
-        }}>
+      </div>
+
+      <nav style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '24px',
+        marginLeft: 'auto',
+      }}>
+        <Link 
+          href="/timeline" 
+          className={styles.navLink}
+          style={linkStyle(pathname === '/timeline')}
+        >
           계란타임라인
         </Link>
-        <Link href="/wiki" style={{
-          color: 'rgba(255, 255, 255, 0.8)',
-          textDecoration: 'none',
-          fontSize: '0.9rem',
-          fontWeight: pathname === '/wiki' ? 'bold' : 'normal',
-        }}>
+        <Link 
+          href="/wiki" 
+          className={styles.navLink}
+          style={linkStyle(pathname === '/wiki')}
+        >
           계란위키
+        </Link>
+        <Link 
+          href="/" 
+          className={styles.navLink}
+          style={linkStyle(pathname === '/')}
+        >
+          광장의 목소리
         </Link>
       </nav>
     </header>
