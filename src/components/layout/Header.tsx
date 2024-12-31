@@ -43,7 +43,7 @@ export default function Header() {
         />
         <a 
           href="https://www.20241203.info/" 
-          target="_blank" 
+          target="_self" 
           rel="noopener noreferrer" 
           className={styles.logo}
         >
