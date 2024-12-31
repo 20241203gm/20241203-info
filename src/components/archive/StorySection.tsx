@@ -133,7 +133,8 @@ export default function StorySection({ background, title, content, media, summar
         {mediaItem?.type === 'video' ? (
           <div style={{
             width: '80%',
-            height: '65%',
+            maxWidth: '1280px',
+            margin: '0 auto',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',

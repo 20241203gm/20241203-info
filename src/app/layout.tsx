@@ -4,7 +4,7 @@ import Header from '@/components/layout/Header'
 
 export const metadata: Metadata = {
   title: '20241203.info',
-  description: '시민활동 인터랙티브 아카이브',
+  description: '광장에서 시민들은 어떤 미래를 열었나',
 }
 
 export default function RootLayout({
