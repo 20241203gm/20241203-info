@@ -8,7 +8,7 @@ interface StorySectionProps {
   title: string;
   content: string;
   media?: Media[];
-  summary: string;
+  summary?: string;
 }
 
 export default function StorySection({ background, title, content, media, summary }: StorySectionProps) {
