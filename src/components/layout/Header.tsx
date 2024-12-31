@@ -41,24 +41,17 @@ export default function Header() {
             borderRadius: '4px',
           }}
         />
-        <a href="https://www.20241203.info/" target="_blank" rel="noopener noreferrer" style={{
-          color: 'white',
-          textDecoration: 'none',
-          fontSize: '1.1rem',
-          fontFamily: "'Noto Sans KR', sans-serif",
-          fontWeight: '500',
-          letterSpacing: '-0.02em',
-        }}>
+        <a 
+          href="https://www.20241203.info/" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          className={styles.logo}
+        >
           20241203.info
         </a>
       </div>
 
-      <nav style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: '24px',
-        marginLeft: 'auto',
-      }}>
+      <nav className={styles.nav}>
         <Link 
           href="/timeline" 
           className={styles.navLink}
