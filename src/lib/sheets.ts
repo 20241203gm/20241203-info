@@ -45,7 +45,6 @@ export async function getStoriesFromSheet(): Promise<Story[]> {
       const title = row[0] || '';
       const background = row[1] || 'https://images.unsplash.com/photo-1596796930385-0885a029049b';
       const content = row[2] || '';
-      
       const media: Media[] = [];
       if (row[3] && row[4]) {
         media.push({
@@ -56,8 +55,9 @@ export async function getStoriesFromSheet(): Promise<Story[]> {
       }
 
       const story = {
+        title,
         background,
-        content: row[1] || '',
+        content: content,
         media: media.length > 0 ? media : undefined,
         summary: row[5] || undefined
       };
