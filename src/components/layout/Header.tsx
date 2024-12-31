@@ -54,22 +54,19 @@ export default function Header() {
       <nav className={styles.nav}>
         <Link 
           href="/timeline" 
-          className={styles.navLink}
-          style={linkStyle(pathname === '/timeline')}
+          className={`${styles.navLink} ${pathname === '/timeline' ? styles.active : ''}`}
         >
           계란타임라인
         </Link>
         <Link 
           href="/wiki" 
-          className={styles.navLink}
-          style={linkStyle(pathname === '/wiki')}
+          className={`${styles.navLink} ${pathname === '/wiki' ? styles.active : ''}`}
         >
           계란위키
         </Link>
         <Link 
           href="/" 
-          className={styles.navLink}
-          style={linkStyle(pathname === '/')}
+          className={`${styles.navLink} ${pathname === '/' ? styles.active : ''}`}
         >
           광장의 목소리
         </Link>

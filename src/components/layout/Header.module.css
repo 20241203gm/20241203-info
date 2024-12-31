@@ -26,4 +26,9 @@
   align-items: center;
   gap: clamp(12px, 2vw, 24px);
   margin-left: auto;
+}
+
+.active {
+  border-bottom: 3px solid white;
+  font-weight: bold;
 } 

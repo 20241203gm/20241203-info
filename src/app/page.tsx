@@ -82,7 +82,10 @@ export default function HomePage() {
       overflowY: 'auto',
       scrollSnapType: 'y mandatory',
       scrollBehavior: 'smooth',
-      position: 'relative'
+      position: 'relative',
+      margin: 0,
+      padding: 0,
+      backgroundColor: 'black',
     }}>
       {stories.map((story, index) => {
         console.log('Rendering story:', index, story);
