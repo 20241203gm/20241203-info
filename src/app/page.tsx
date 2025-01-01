@@ -13,11 +13,13 @@ export default function HomePage() {
     console.log('Client: Starting to load stories');
     try {
       setLoading(true);
-      const response = await fetch('/api/stories?' + new Date().getTime(), {
+      const response = await fetch('/api/stories', {
+        next: { revalidate: 0 },
         cache: 'no-store',
         headers: {
           'Pragma': 'no-cache',
-          'Cache-Control': 'no-cache'
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Expires': '0',
         }
       });
       console.log('Client: Response status:', response.status);
@@ -52,6 +54,11 @@ export default function HomePage() {
 
   useEffect(() => {
     loadStories();
+    
+    // 30초마다 데이터 갱신
+    const interval = setInterval(loadStories, 30000);
+    
+    return () => clearInterval(interval);
   }, []);
 
   if (loading) {

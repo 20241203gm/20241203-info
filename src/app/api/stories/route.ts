@@ -235,12 +235,17 @@ export async function GET() {
     console.log('API: Fetching stories...');
     const stories = await getStoriesFromSheet();
     console.log('API: Stories fetched successfully:', JSON.stringify(stories, null, 2));
-    return NextResponse.json(stories, {
+    
+    return new NextResponse(JSON.stringify(stories), {
+      status: 200,
       headers: {
-        'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0',
+        'Content-Type': 'application/json',
+        'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
         'Pragma': 'no-cache',
         'Expires': '0',
-        'Surrogate-Control': 'no-store'
+        'Surrogate-Control': 'no-store',
+        'Age': '0',
+        'Vary': '*'
       }
     });
   } catch (error: any) {
