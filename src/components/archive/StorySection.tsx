@@ -76,10 +76,10 @@ export default function StorySection({ background, title, content, media, summar
         }} />
       </div>
 
-      {/* 제목 (상위 15%) */}
+      {/* 제목 (상위 10%) */}
       <div style={{
         position: 'absolute',
-        top: '15%',
+        top: '10%',
         left: '50%',
         transform: 'translateX(-50%)',
         width: '80%',
