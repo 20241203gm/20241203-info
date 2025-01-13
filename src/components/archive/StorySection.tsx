@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Story, Media } from '@/types/story';
 
 interface StorySectionProps {
@@ -10,11 +10,32 @@ interface StorySectionProps {
   media?: Media[];
   summary?: string;
   last?: string;
+  sheetId?: string;
+  range?: string;
 }
 
-export default function StorySection({ background, title, content, media, summary, last }: StorySectionProps) {
+export default function StorySection({ background, title, content, media, summary, last, sheetId, range }: StorySectionProps) {
   const mediaItem = media && media[0];
   const videoRef = useRef<HTMLIFrameElement>(null);
+  const [sheetData, setSheetData] = useState<any>(null);
+
+  const fetchSheetData = async () => {
+    if (!sheetId || !range) return;
+    
+    try {
+      const response = await fetch(`/api/sheets?sheetId=${sheetId}&range=${range}`);
+      const data = await response.json();
+      setSheetData(data);
+    } catch (error) {
+      console.error('구글 시트 데이터 가져오기 실패:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchSheetData();
+    const interval = setInterval(fetchSheetData, 5000);
+    return () => clearInterval(interval);
+  }, [sheetId, range]);
 
   useEffect(() => {
     if (!videoRef.current || mediaItem?.type !== 'video') return;
@@ -45,6 +66,35 @@ export default function StorySection({ background, title, content, media, summar
       observer.disconnect();
     };
   }, [mediaItem]);
+
+  const renderSheetData = () => {
+    if (!sheetData) return null;
+
+    return (
+      <div style={{
+        position: 'absolute',
+        bottom: '10%',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        width: '80%',
+        zIndex: 1,
+        color: 'white',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        padding: '1rem',
+        borderRadius: '8px',
+      }}>
+        <pre style={{
+          margin: 0,
+          whiteSpace: 'pre-wrap',
+          wordBreak: 'keep-all',
+          fontSize: '0.9rem',
+          fontFamily: "'Noto Sans KR', sans-serif",
+        }}>
+          {JSON.stringify(sheetData, null, 2)}
+        </pre>
+      </div>
+    );
+  };
 
   return (
     <section style={{
@@ -326,6 +376,9 @@ export default function StorySection({ background, title, content, media, summar
           </a>
         </div>
       )}
+
+      {/* 구글 시트 데이터 표시 */}
+      {renderSheetData()}
     </section>
   );
 }
